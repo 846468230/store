@@ -15,7 +15,7 @@ class UserProfile(AbstractUser):
                               verbose_name="性别")
     mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="电话")
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
-
+    session_key = models.CharField(null=True,blank=True,max_length=30,verbose_name="微信session_key")
     class Meta:
         verbose_name = "用户"
         verbose_name_plural = "用户"
