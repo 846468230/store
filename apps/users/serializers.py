@@ -73,7 +73,7 @@ class UserRegSerializer(serializers.ModelSerializer):
 
 
 class SmsSerializer(serializers.Serializer):
-    mobile = serializers.CharField(max_length=11)
+    mobile = serializers.CharField(max_length=11,help_text="手机号码")
 
     def validate_mobile(self, mobile):
         """

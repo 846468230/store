@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 
 class UserFavSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
+        default=serializers.CurrentUserDefault(),help_text="当前用户id"
     )
 
     class Meta:

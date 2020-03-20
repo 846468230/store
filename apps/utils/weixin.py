@@ -130,6 +130,8 @@ class JSONWechatTokenSerializer(Serializer):
 
 class ObtainJSONWechatToken(CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = JSONWechatTokenSerializer
+    def get_object(self):
+        return self.request.user
 
 
 obtain_jwt_token = ObtainJSONWechatToken

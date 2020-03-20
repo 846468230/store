@@ -3,7 +3,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -33,9 +33,9 @@ class CustomBackend(ModelBackend):
             return None
 
 
-class UserRegViewSet(CreateModelMixin, viewsets.GenericViewSet):
+class UserViewSet(CreateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     """
-    用户注册
+    用户注册,用户详情,用户更新
     """
     serializer_class = UserRegSerializer
     queryset = User.objects.all()
@@ -53,6 +53,9 @@ class UserRegViewSet(CreateModelMixin, viewsets.GenericViewSet):
 
     def perform_create(self, serializer):
         return serializer.save()
+
+    def get_object(self):
+        return self.request.user
 
 
 class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):

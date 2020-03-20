@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from goods.views import CourseListViewSet, CourseCategoryListView
-from users.views import SmsCodeViewset, UserRegViewSet
+from users.views import SmsCodeViewset, UserViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views
@@ -33,7 +33,7 @@ router.register('category', CourseCategoryListView, basename='course-category')
 # 手机验证码
 router.register('codes', SmsCodeViewset, basename='codes')
 # 用户注册
-router.register('register', UserRegViewSet, basename="register")
+router.register('user', UserViewSet, basename="register")
 # 微信登录
 router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
 # 用户收藏

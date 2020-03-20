@@ -12,7 +12,7 @@ class CourseCategorySerializer2(serializers.ModelSerializer):
 
 
 class CourseCategorySerializer1(serializers.ModelSerializer):
-    sub_cat = CourseCategorySerializer2(many=True)
+    sub_cat = CourseCategorySerializer2(many=True,help_text="子标题")
 
     class Meta:
         model = CourseCategory
@@ -35,7 +35,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     category = CourseCategorySerializer2()
-    teacher = TeacherSerializer()
+    teacher = TeacherSerializer(help_text="老师id")
 
     class Meta:
         model = Course
