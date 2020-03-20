@@ -24,6 +24,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
+from user_operation.views import UserFavViewSet
 router = DefaultRouter()
 
 # course的url
@@ -35,6 +36,8 @@ router.register('codes', SmsCodeViewset, basename='codes')
 router.register('register', UserRegViewSet, basename="register")
 # 微信登录
 router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
+# 用户收藏
+router.register('userfav',UserFavViewSet,basename="userfav")
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
@@ -42,7 +45,7 @@ urlpatterns = [
                   path('docs/', include_docs_urls(title='网站文档')),
                   path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                   # path('api-token-auth/', views.obtain_auth_token)
-                  path(r'^login/$', obtain_jwt_token),
+                  path('login/', obtain_jwt_token),
                   path('', include('social_django.urls', namespace='social')),
                   #path('login_weixin/',ObtainJSONWechatToken),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

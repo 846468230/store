@@ -23,7 +23,7 @@ class UserFav(models.Model):
         unique_together = ("user", "course")
 
     def __str__(self):
-        return self.user.name
+        return self.user.name if self.user.name else self.user.username
 
 
 class UserAsk(models.Model):

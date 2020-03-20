@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Course, CourseCategory  # , LANGUAGE_CHOICES, STYLE_CHOICES
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class CourseCategorySerializer2(serializers.ModelSerializer):
@@ -24,8 +27,15 @@ class CourseCategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "name", "username"]
+
+
 class CourseSerializer(serializers.ModelSerializer):
     category = CourseCategorySerializer2()
+    teacher = TeacherSerializer()
 
     class Meta:
         model = Course

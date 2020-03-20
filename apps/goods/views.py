@@ -33,7 +33,7 @@ class CourseListSetPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class CourseListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class CourseListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
         list:
             获取课程数据
