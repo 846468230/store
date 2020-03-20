@@ -29,7 +29,7 @@ SECRET_KEY = '0+5-f$&c$$s02ziev6^2h2eq%hj+^=ud=fnk5=_-^6xijne6q3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'users.UserProfile'
 # Application definition
