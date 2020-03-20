@@ -24,7 +24,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
-from user_operation.views import UserFavViewSet
+from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet
 router = DefaultRouter()
 
 # course的url
@@ -38,6 +38,10 @@ router.register('user', UserViewSet, basename="register")
 router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
 # 用户收藏
 router.register('userfav',UserFavViewSet,basename="userfav")
+# 用户留言
+router.register('leaving_message',UserLeavingMessageViewSet,basename="用户留言")
+# 用户地址
+router.register('address',UserAddressViewSet,basename="用户地址")
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),

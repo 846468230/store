@@ -16,6 +16,12 @@ User = get_user_model()
 """
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "name","nickname","birthday","gender"]
+
+
 class UserRegSerializer(serializers.ModelSerializer):
     # 如果会删除code这个属性 那么需要write_only = True 这样返回消息序列化就不回带带着code
     code = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, label="验证码",
@@ -25,14 +31,15 @@ class UserRegSerializer(serializers.ModelSerializer):
                                      "max_length": "验证码格式错误",
                                      "min_length": "验证码格式错误",
                                  }, help_text="验证码", )
-    username = serializers.CharField(label="用户名", help_text="用户名——表单设置为手机号，就不用在输入mobile了，后台逻辑已经改好", required=True, allow_blank=False,
+    username = serializers.CharField(label="用户名", help_text="用户名——表单设置为手机号，就不用在输入mobile了，后台逻辑已经改好", required=True,
+                                     allow_blank=False,
                                      validators=[UniqueValidator(queryset=User.objects.all(), message="用户已存在")])
     password = serializers.CharField(
-        style={'input_type': 'password'},label="密码",help_text="密码",write_only=True
+        style={'input_type': 'password'}, label="密码", help_text="密码", write_only=True
     )
 
-    #重载了create方法
-    #def create(self, validated_data):
+    # 重载了create方法
+    # def create(self, validated_data):
     #    user = super(UserRegSerializer,self).create(validated_data=validated_data)
     #    user.set_password(validated_data["password"])
     #    user.save()
@@ -64,7 +71,7 @@ class UserRegSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username","password", "code", "mobile"]
+        fields = ["username", "password", "code", "mobile"]
 
 
 """
@@ -73,7 +80,7 @@ class UserRegSerializer(serializers.ModelSerializer):
 
 
 class SmsSerializer(serializers.Serializer):
-    mobile = serializers.CharField(max_length=11,help_text="手机号码")
+    mobile = serializers.CharField(max_length=11, help_text="手机号码")
 
     def validate_mobile(self, mobile):
         """

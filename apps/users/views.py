@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.authentication import SessionAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin,UpdateModelMixin
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,7 +13,8 @@ from utils.yunpian import YunPian
 from store.settings import APIKEY
 from random import choice
 from .models import VerifyCode
-from .serializers import SmsSerializer, UserRegSerializer
+from .serializers import SmsSerializer, UserRegSerializer,UserDetailSerializer
+from  django.shortcuts import get_object_or_404
 from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
 
 # Create your views here.
@@ -33,12 +36,34 @@ class CustomBackend(ModelBackend):
             return None
 
 
-class UserViewSet(CreateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
+class UserViewSet(CreateModelMixin,UpdateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet):
     """
-    用户注册,用户详情,用户更新
+    create:
+        用户注册
+    retrieve:
+        用户详情
+    update:
+        用户更新
     """
     serializer_class = UserRegSerializer
     queryset = User.objects.all()
+    authentication_classes = [JSONWebTokenAuthentication, SessionAuthentication]
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [IsAuthenticated(),]
+        elif self.action == "create":
+            return []
+        else:
+            return []
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return UserDetailSerializer
+        elif self.action == "create":
+            return UserRegSerializer
+        else:
+            return UserDetailSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -55,6 +80,7 @@ class UserViewSet(CreateModelMixin, RetrieveModelMixin, viewsets.GenericViewSet)
         return serializer.save()
 
     def get_object(self):
+        self.check_object_permissions(self.request, self.request.user)
         return self.request.user
 
 
