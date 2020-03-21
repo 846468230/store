@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import Course
+from .models import Course, CourseCategory
 from django.db.models import Q
 
 
@@ -19,3 +19,13 @@ class CourseFilter(filters.FilterSet):
     class Meta:
         model = Course
         fields = ['category', 'teacher', 'min_price', 'max_price', 'online', 'degree']
+
+
+class CategoryFilter(filters.FilterSet):
+    """
+    类别过滤
+    """
+
+    class Meta:
+        model = CourseCategory
+        fields = ['category_type']

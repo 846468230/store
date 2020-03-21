@@ -13,7 +13,7 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from .filters import CourseFilter
+from .filters import CourseFilter,CategoryFilter
 
 
 class CourseCategoryListView(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):
@@ -25,6 +25,8 @@ class CourseCategoryListView(mixins.ListModelMixin,mixins.RetrieveModelMixin,vie
     """
     queryset = CourseCategory.objects.all()
     serializer_class = CourseCategorySerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_class = CategoryFilter
 
 
 class CourseListSetPagination(PageNumberPagination):
