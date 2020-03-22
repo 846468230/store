@@ -1,8 +1,8 @@
 from django.shortcuts import render
 # Create your views here.
-from .models import Course,CourseCategory
+from .models import Course, CourseCategory, Banner
 from django.views.generic.base import View
-from .serializers import CourseSerializer,CourseCategorySerializer
+from .serializers import CourseSerializer, CourseCategorySerializer, CourseCategoryDetailSerializer, BannerSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,10 +13,22 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from .filters import CourseFilter,CategoryFilter
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
+from .filters import CourseFilter, CategoryFilter
 
 
-class CourseCategoryListView(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):
+class BannerListViewSet(CacheResponseMixin,mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    list:
+        轮播的商品
+    """
+    serializer_class = BannerSerializer
+    queryset = Banner.objects.all().order_by("index")
+    throttle_classes = [AnonRateThrottle,UserRateThrottle]
+
+
+class CourseCategoryListView(CacheResponseMixin,mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     list:
         课程分类列表数据
@@ -24,9 +36,15 @@ class CourseCategoryListView(mixins.ListModelMixin,mixins.RetrieveModelMixin,vie
         获取课程的分类详情
     """
     queryset = CourseCategory.objects.all()
-    serializer_class = CourseCategorySerializer
     filter_backends = [DjangoFilterBackend]
     filter_class = CategoryFilter
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return CourseCategoryDetailSerializer
+        else:
+            return CourseCategorySerializer
 
 
 class CourseListSetPagination(PageNumberPagination):
@@ -35,7 +53,7 @@ class CourseListSetPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class CourseListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CourseListViewSet(CacheResponseMixin,mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
         list:
             获取课程数据
@@ -43,10 +61,18 @@ class CourseListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewset
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CourseListSetPagination
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filter_class = CourseFilter
     search_fields = ['name', 'desc', 'detail', 'tag']
     ordering_fields = ['price', 'learning_times', 'click_nums', 'added_datetime', 'degree']
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.click_nums += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class CourseListView(generics.ListAPIView):

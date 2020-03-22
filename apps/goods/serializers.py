@@ -1,27 +1,11 @@
 from rest_framework import serializers
-from .models import Course, CourseCategory  # , LANGUAGE_CHOICES, STYLE_CHOICES
+from .models import Course, CourseCategory,Banner # , LANGUAGE_CHOICES, STYLE_CHOICES
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
-class CourseCategorySerializer2(serializers.ModelSerializer):
-    class Meta:
-        model = CourseCategory
-        fields = "__all__"
-
-
 class CourseCategorySerializer1(serializers.ModelSerializer):
-    sub_cat = CourseCategorySerializer2(many=True, help_text="子标题")
-
-    class Meta:
-        model = CourseCategory
-        fields = "__all__"
-
-
-class CourseCategorySerializer(serializers.ModelSerializer):
-    sub_cat = CourseCategorySerializer1(many=True)
-
     class Meta:
         model = CourseCategory
         fields = "__all__"
@@ -33,20 +17,49 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "username"]
 
 
-class CourseFavSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['name', 'teacher', 'price', 'degree', 'learn_times', 'image', 'online']
-
-
 class CourseSerializer(serializers.ModelSerializer):
-    category = CourseCategorySerializer2()
+    category = CourseCategorySerializer1()
     teacher = TeacherSerializer(help_text="老师id")
 
     class Meta:
         model = Course
         fields = "__all__"  # ['id','name','desc','teacher','detail','price','degree','learn_times',
         # 'students','fav_nums','image','click_nums','category','online','tag','you_need_know','teacher_tell','added_datetime','updated_datetime']
+
+
+class CourseCategoryDetailSerializer1(serializers.ModelSerializer):
+    goods = CourseSerializer(many=True, help_text="课程")
+
+    class Meta:
+        model = CourseCategory
+        fields = "__all__"
+
+
+class CourseCategoryDetailSerializer(serializers.ModelSerializer):
+    sub_cat = CourseCategoryDetailSerializer1(many=True)
+
+    class Meta:
+        model = CourseCategory
+        fields = "__all__"  # ['id','name','desc','teacher','detail','price','degree','learn_times',
+        # 'students','fav_nums','image','click_nums','category','online','tag','you_need_know','teacher_tell','added_datetime','updated_datetime']
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = "__all__"
+
+class CourseCategorySerializer(serializers.ModelSerializer):
+    sub_cat = CourseCategorySerializer1(many=True)
+
+    class Meta:
+        model = CourseCategory
+        fields = "__all__"
+
+
+class CourseFavSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['id','name', 'teacher', 'price', 'degree', 'learn_times', 'image', 'online']
 
 
 """

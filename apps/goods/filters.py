@@ -9,7 +9,7 @@ class CourseFilter(filters.FilterSet):
     """
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
-    top_category = filters.NumberFilter(method='top_category_filter')
+    top_category = filters.NumberFilter(method='top_category_filter',help_text="上级分类")
 
     def top_category_filter(self, queryset, name, value):
         return queryset.filter(Q(category_id=value) | Q(category__parent_category_id=value) | Q(
@@ -18,7 +18,7 @@ class CourseFilter(filters.FilterSet):
     # name = filters.CharFilter(field_name="name",lookup_expr="icontains")
     class Meta:
         model = Course
-        fields = ['category', 'teacher', 'min_price', 'max_price', 'online', 'degree']
+        fields = ['category', 'teacher', 'min_price', 'max_price', 'online', 'degree','top_category']
 
 
 class CategoryFilter(filters.FilterSet):

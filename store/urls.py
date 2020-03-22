@@ -17,14 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from goods.views import CourseListViewSet, CourseCategoryListView
+from goods.views import CourseListViewSet, CourseCategoryListView,BannerListViewSet
 from users.views import SmsCodeViewset, UserViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
+from trade.views import ShoppingCartViewSet,OrderViewset,AlipayView
 from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet
+
 router = DefaultRouter()
 
 # course的url
@@ -39,9 +41,15 @@ router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
 # 用户收藏
 router.register('userfav',UserFavViewSet,basename="userfav")
 # 用户留言
-router.register('leaving_message',UserLeavingMessageViewSet,basename="用户留言")
+router.register('leaving_message',UserLeavingMessageViewSet,basename="leaving_message")
 # 用户地址
-router.register('address',UserAddressViewSet,basename="用户地址")
+router.register('address',UserAddressViewSet,basename="address")
+# 购物车
+router.register('shoppingcart',ShoppingCartViewSet,basename="shoppingcart")
+# 订单信息
+router.register('order',OrderViewset,basename="order")
+# 轮播图
+router.register('banner',BannerListViewSet,basename="banner")
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
@@ -50,6 +58,7 @@ urlpatterns = [
                   path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                   # path('api-token-auth/', views.obtain_auth_token)
                   path('login/', obtain_jwt_token),
+                  path('alipay/return/',AlipayView.as_view()),
                   path('', include('social_django.urls', namespace='social')),
                   #path('login_weixin/',ObtainJSONWechatToken),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

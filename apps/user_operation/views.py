@@ -9,7 +9,7 @@ from rest_framework.authentication import SessionAuthentication
 from utils.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserLeavingMessageSerializer, UserAddressSerializer
-from .models import UserLeavingMessage,UserAddress
+from .models import UserLeavingMessage, UserAddress
 
 
 class UserAddressViewSet(viewsets.ModelViewSet):
@@ -64,5 +64,5 @@ class UserFavViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, Destr
             return UserFavListSerializer
 
     def get_queryset(self):
-        self.check_object_permissions(self.request, self.request.user)
+        #self.check_object_permissions(self.request, self.request.user)
         return UserFav.objects.filter(user=self.request.user)

@@ -126,8 +126,20 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'utils.render.EmberJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day',
+    }
 
+}
+
+#DRF拓展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT':60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE':'default',
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -241,3 +253,11 @@ APP_SECRET = 'a9bf876aaa883cf9af111eeb513eb029'
 SOCIAL_AUTH_WEIXIN_KEY = 'wx09a82df3fbf9d3a9'
 SOCIAL_AUTH_WEIXIN_SECRET = 'a9bf876aaa883cf9af111eeb513eb029'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
+
+ALI_APP_ID = "2016101800713621"
+ALI_PUB_KEY_PATH = os.path.join(BASE_DIR,'apps/trade/keys/alipay_key.txt')
+PRIVATE_KEY_PATH = os.path.join(BASE_DIR,'apps/trade/keys/private_key.txt')
+ALIPAY_NOTIFY_URL = "http://39.106.181.61:8000/alipay/return/"
+ALIPAY_RETURN_URL = "http://39.106.181.61:8000/alipay/return/"
+ALIPAY_DEBUG_URL = "https://openapi.alipaydev.com/gateway.do"
+ALIPAY_ONLINE_URL= "https://openapi.alipay.com/gateway.do"

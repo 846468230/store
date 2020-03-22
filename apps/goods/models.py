@@ -47,7 +47,7 @@ class Course(models.Model):
     fav_nums = models.IntegerField(default=0, verbose_name='收藏人数',help_text="收藏人数")
     image = models.ImageField(upload_to='goods/images/', verbose_name='封面图', max_length=100,help_text="课程封面图")
     click_nums = models.IntegerField(default=0, verbose_name='点击数',help_text="点击次数")
-    category = models.ForeignKey(CourseCategory, verbose_name="课程类别", on_delete=models.CASCADE,help_text="课程类型id")
+    category = models.ForeignKey(CourseCategory, verbose_name="课程类别", on_delete=models.CASCADE,help_text="课程类型id",related_name="goods")
     online = models.BooleanField(default=True, verbose_name="是否线上",help_text="是否线上")
     tag = models.CharField(default='', verbose_name='课程标签', max_length=10,help_text="课程标签")
     you_need_know = models.CharField(default='', max_length=300, verbose_name='课前须知',help_text="课前须知")
