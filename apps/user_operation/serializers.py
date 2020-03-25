@@ -38,10 +38,10 @@ class UserAddressSerializer(serializers.ModelSerializer):
         fields = ['user', 'province', "city", "district", "address", "signer_name", "signer_mobile", "added_datetime"]
 
 
-class UserCourseSerializer(serializers.Serializer):
+class UserCourseListSerializer(serializers.Serializer):
     class Meta:
         model = UserCourse
-        fields = "__all__"
+        fields = ["id","user","course"]
 
 class UserLeavingMessageSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(

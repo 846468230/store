@@ -99,7 +99,7 @@ class UserMessage(models.Model):
 
 class UserCourse(models.Model):
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE,help_text="用户id")
-    course = models.ForeignKey(Course, verbose_name='课程', on_delete=models.CASCADE,help_text="用户课程")
+    course = models.ForeignKey(Course, verbose_name='课程', on_delete=models.CASCADE,help_text="用户课程",related_name="user_course")
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间',help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间',help_text="更新时间")
 

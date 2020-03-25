@@ -8,9 +8,10 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from utils.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserLeavingMessageSerializer, UserAddressSerializer, UserCourseSerializer
+from .serializers import UserLeavingMessageSerializer, UserAddressSerializer, UserCourseListSerializer
 from .models import UserLeavingMessage, UserAddress, UserCourse
-
+from goods.serializers import CourseSerializer
+from goods.models import Course
 
 class UserAddressViewSet(viewsets.ModelViewSet):
     """
@@ -38,12 +39,11 @@ class UserCourseViewSet(ListModelMixin, viewsets.GenericViewSet):
     用户购买的课程
     """
     authentication_classes = [JSONWebTokenAuthentication, SessionAuthentication]
-    serializer_class = UserCourseSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = CourseSerializer
+    permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
-        query_set = UserCourse.objects.filter(user=self.request.user)
-        return query_set
+        return Course.objects.filter(id__in = UserCourse.objects.filter(user=self.request.user).values('course'))
 
 
 class UserLeavingMessageViewSet(CreateModelMixin, ListModelMixin, DestroyModelMixin, RetrieveModelMixin,
