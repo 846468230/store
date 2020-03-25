@@ -42,7 +42,8 @@ class UserCourseViewSet(ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return UserCourse.objects.filter(user=self.request.user)
+        query_set = UserCourse.objects.filter(user=self.request.user)
+        return query_set
 
 
 class UserLeavingMessageViewSet(CreateModelMixin, ListModelMixin, DestroyModelMixin, RetrieveModelMixin,
