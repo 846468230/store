@@ -8,8 +8,8 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from utils.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserLeavingMessageSerializer, UserAddressSerializer
-from .models import UserLeavingMessage, UserAddress
+from .serializers import UserLeavingMessageSerializer, UserAddressSerializer, UserCourseSerializer
+from .models import UserLeavingMessage, UserAddress, UserCourse
 
 
 class UserAddressViewSet(viewsets.ModelViewSet):
@@ -31,6 +31,18 @@ class UserAddressViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)
+
+
+class UserCourseViewSet(ListModelMixin, viewsets.GenericViewSet):
+    """
+    用户购买的课程
+    """
+    authentication_classes = [JSONWebTokenAuthentication, SessionAuthentication]
+    serializer_class = UserCourseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserCourse.objects.filter(user=self.request.user)
 
 
 class UserLeavingMessageViewSet(CreateModelMixin, ListModelMixin, DestroyModelMixin, RetrieveModelMixin,
@@ -64,5 +76,5 @@ class UserFavViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, Destr
             return UserFavListSerializer
 
     def get_queryset(self):
-        #self.check_object_permissions(self.request, self.request.user)
+        # self.check_object_permissions(self.request, self.request.user)
         return UserFav.objects.filter(user=self.request.user)

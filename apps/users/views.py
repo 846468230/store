@@ -13,7 +13,7 @@ from utils.yunpian import YunPian
 from store.settings import APIKEY
 from random import choice
 from .models import VerifyCode
-from .serializers import SmsSerializer, UserRegSerializer,UserDetailSerializer
+from .serializers import SmsSerializer, UserRegSerializer,UserDetailSerializer,GroupSerializer
 from  django.shortcuts import get_object_or_404
 from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
 
@@ -65,6 +65,15 @@ class UserViewSet(CreateModelMixin,UpdateModelMixin, RetrieveModelMixin, viewset
         else:
             return UserDetailSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data_dict = serializer.data
+        #data_dict["groups"] = GroupSerializer(self.request.user.groups.all(),many=True).data
+        #data_dict["permissions"] = User.get_all_permissions(self.request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(data_dict, status=status.HTTP_200_OK, headers=headers)
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -73,6 +82,8 @@ class UserViewSet(CreateModelMixin,UpdateModelMixin, RetrieveModelMixin, viewset
         payload = jwt_payload_handler(user)
         data_dict["token"] = jwt_encode_handler(payload)
         data_dict["name"] = user.name if user.name else user.username
+        data_dict["groups"] = GroupSerializer(self.request.user.groups.all(), many=True).data
+        data_dict["permissions"] = sorted(User.get_all_permissions(self.request.user))
         headers = self.get_success_headers(serializer.data)
         return Response(data_dict, status=status.HTTP_201_CREATED, headers=headers)
 

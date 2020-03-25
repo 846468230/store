@@ -74,8 +74,9 @@ class Course(models.Model):
 
 # 章节信息
 class Lesson(models.Model):
-    course = models.ForeignKey(Course, verbose_name='课程', on_delete=models.CASCADE,help_text="课程id")
+    course = models.ForeignKey(Course, verbose_name='课程', on_delete=models.CASCADE,help_text="课程id",related_name="lesson")
     name = models.CharField(max_length=100, verbose_name='章节名',help_text="章节名称")
+    index = models.IntegerField(default=0,verbose_name="显示顺序",help_text="显示顺序")
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间',help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间',help_text="更新时间")
 
@@ -91,7 +92,7 @@ class Lesson(models.Model):
 
 
 class Video(models.Model):
-    lesson = models.ForeignKey(Lesson, verbose_name='章节', on_delete=models.CASCADE,help_text="章节id")
+    lesson = models.ForeignKey(Lesson, verbose_name='章节', on_delete=models.CASCADE,help_text="章节id",related_name="video")
     name = models.CharField(max_length=100, verbose_name='视频名',help_text="视频名称")
     url = models.URLField(max_length=200, verbose_name='访问地址', default='www.baidu.com',help_text="视频地址")
     learn_times = models.IntegerField(default=0, verbose_name='视频时长(分钟数)',help_text="视频时长")

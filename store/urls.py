@@ -17,15 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from goods.views import CourseListViewSet, CourseCategoryListView,BannerListViewSet
+from goods.views import CourseListViewSet, CourseCategoryListView,BannerListViewSet,LessonRetrieveViewSet
 from users.views import SmsCodeViewset, UserViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
 from rest_framework.authtoken import views
-from rest_framework_jwt.views import obtain_jwt_token
+#from rest_framework_jwt.views import obtain_jwt_token
+from utils.JSONWebTokenAPIView import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
 from trade.views import ShoppingCartViewSet,OrderViewset,AlipayView
-from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet
+from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet,UserCourseViewSet
 
 router = DefaultRouter()
 
@@ -50,6 +51,10 @@ router.register('shoppingcart',ShoppingCartViewSet,basename="shoppingcart")
 router.register('order',OrderViewset,basename="order")
 # 轮播图
 router.register('banner',BannerListViewSet,basename="banner")
+# 课程页面
+router.register('lesson',LessonRetrieveViewSet,basename="lesson")
+# 用户购买的课程
+router.register('user_course',UserCourseViewSet,basename="user_course")
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),

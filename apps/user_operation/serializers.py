@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import UserFav
 from rest_framework.validators import UniqueTogetherValidator
 from goods.serializers import CourseFavSerializer
-from .models import UserLeavingMessage, UserAddress
+from .models import UserLeavingMessage, UserAddress,UserCourse
 import re
 from store.settings import REGEX_MOBILE
 from datetime import datetime, timedelta
@@ -37,6 +37,11 @@ class UserAddressSerializer(serializers.ModelSerializer):
         model = UserAddress
         fields = ['user', 'province', "city", "district", "address", "signer_name", "signer_mobile", "added_datetime"]
 
+
+class UserCourseSerializer(serializers.Serializer):
+    class Meta:
+        model = UserCourse
+        fields = "__all__"
 
 class UserLeavingMessageSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(

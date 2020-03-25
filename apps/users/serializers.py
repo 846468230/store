@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from datetime import datetime
 from datetime import timedelta
-
+from django.contrib.auth.models import Group, Permission
 from rest_framework.validators import UniqueValidator
 
 from .models import VerifyCode
@@ -16,12 +16,25 @@ User = get_user_model()
 """
 
 
+class PermissionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename']
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    permissions = PermissionsSerializer(many=True)
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
 class UserDetailSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ["username", "name", "avatar","nickname","birthday", "gender"]
+        fields = ["username", "name", "avatar", "nickname", "birthday", "gender"]
 
 
 class UserRegSerializer(serializers.ModelSerializer):

@@ -1,8 +1,32 @@
 from rest_framework import serializers
-from .models import Course, CourseCategory,Banner # , LANGUAGE_CHOICES, STYLE_CHOICES
+from .models import Course, CourseCategory, Banner, Lesson, Video  # , LANGUAGE_CHOICES, STYLE_CHOICES
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Video
+
+
+class VideoIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Video
+
+
+class LessonDetailSerializer(serializers.ModelSerializer):
+    video = VideoIdSerializer(many=True)
+    class Meta:
+        model = Lesson
+        fields = "__all__"
+class LessonSerializer(serializers.ModelSerializer):
+    #video = VideoIdSerializer(many=True)
+    class Meta:
+        model = Lesson
+        fields = "__all__"
 
 
 class CourseCategorySerializer1(serializers.ModelSerializer):
@@ -15,6 +39,15 @@ class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "name", "username"]
+
+
+class CourseLessonSerializer(serializers.ModelSerializer):
+    category = CourseCategorySerializer1()
+    teacher = TeacherSerializer(help_text="老师id")
+    lesson = LessonSerializer(many=True)
+    class Meta:
+        model = Course
+        fields = "__all__"
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -43,10 +76,12 @@ class CourseCategoryDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"  # ['id','name','desc','teacher','detail','price','degree','learn_times',
         # 'students','fav_nums','image','click_nums','category','online','tag','you_need_know','teacher_tell','added_datetime','updated_datetime']
 
+
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
         fields = "__all__"
+
 
 class CourseCategorySerializer(serializers.ModelSerializer):
     sub_cat = CourseCategorySerializer1(many=True)
@@ -59,7 +94,7 @@ class CourseCategorySerializer(serializers.ModelSerializer):
 class CourseFavSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['id','name', 'teacher', 'price', 'degree', 'learn_times', 'image', 'online']
+        fields = ['id', 'name', 'teacher', 'price', 'degree', 'learn_times', 'image', 'online']
 
 
 """
