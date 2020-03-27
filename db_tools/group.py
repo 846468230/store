@@ -8,6 +8,7 @@ import django
 
 django.setup()
 from django.contrib.auth.models import Group, Permission
+from marketing.models import MarketerConfigs
 
 GROUPS = ['admin', 'marketer', 'teacher', 'insider', 'member']  # 管理员，销售人员，老师，内部人员，普通会员
 admin_permissions = ['change_userprofile', 'add_userprofile', 'view_userprofile', 'add_verifycode', 'change_verifycode',
@@ -63,3 +64,7 @@ for codename in member_permissions:
     g = Group.objects.get(name="member")
     p = Permission.objects.get(codename=codename)
     g.permissions.add(p)
+
+configs = [(1,0.1,0.05),(2,0.2,0.1),(3,0.3,0.15)]
+for item in configs:
+    config = MarketerConfigs.objects.get_or_create(level=item[0],factor_first=item[1],factor_second=item[2])

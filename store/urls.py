@@ -27,7 +27,8 @@ from utils.JSONWebTokenAPIView import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
 from trade.views import ShoppingCartViewSet,OrderViewset,AlipayView
 from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet,UserCourseViewSet
-
+from marketing.views import MarketingRelationshipViewSet,PosterViewSet,TeacherApplicationViewSet,MarketerApplicationViewSet,MarketingCodeViewSet
+from trade.views import TeacherManagementViewSet
 router = DefaultRouter()
 
 # course的url
@@ -55,6 +56,18 @@ router.register('banner',BannerListViewSet,basename="banner")
 router.register('lesson',LessonRetrieveViewSet,basename="lesson")
 # 用户购买的课程
 router.register('user_course',UserCourseViewSet,basename="user_course")
+# 用户的营销关系
+router.register('marketing',MarketingRelationshipViewSet,basename="marketing")
+# 海报
+router.register('poster',PosterViewSet,basename="poster")
+# 老师身份申请
+router.register('teacher_application',TeacherApplicationViewSet,basename='teacher_application')
+# 营销人员身份申请
+router.register('marketer_application',MarketerApplicationViewSet,basename="marketer_application")
+# 老师佣金
+router.register('teacher_commission',TeacherManagementViewSet,basename="teacher_commission")
+# 营销推广码
+router.register('marketing_code',MarketingCodeViewSet,basename='marketing_code')
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),

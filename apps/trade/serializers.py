@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ShoppingCart
+from .models import ShoppingCart,TeacherManagement
 from goods.models import Course
 from goods.serializers import CourseSerializer
 from trade.models import OrderInfo, OrderGoods
@@ -7,6 +7,11 @@ from goods.serializers import CourseSerializer
 from utils.alipay import AliPay
 from store.settings import PRIVATE_KEY_PATH, ALIPAY_RETURN_URL, ALIPAY_NOTIFY_URL, ALI_PUB_KEY_PATH, DEBUG, ALI_APP_ID,ALIPAY_DEBUG_URL,ALIPAY_ONLINE_URL
 
+
+class TeacherManagementSerializer(serializers.Serializer):
+    class Meta:
+        model = TeacherManagement
+        fields = ["commission"]
 
 class ShoppingCartDetailSerializer(serializers.ModelSerializer):
     goods = CourseSerializer()

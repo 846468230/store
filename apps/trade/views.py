@@ -5,13 +5,27 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer
-from .models import ShoppingCart, OrderInfo, OrderGoods
-from .serializers import OrderSerializer, OrderDetailSerializer
+from .models import ShoppingCart, OrderInfo, OrderGoods,TeacherManagement
+from .serializers import OrderSerializer, OrderDetailSerializer,TeacherManagementSerializer
 from rest_framework import mixins, viewsets
 from django.shortcuts import redirect
 from rest_framework.routers import reverse
 
 # Create your views here.
+class TeacherManagementViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):
+    """
+        订单管理
+        list:
+            获取教师佣金
+        retrieve:
+            获取教师佣金
+        """
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = TeacherManagementSerializer
+    def get_queryset(self):
+        return TeacherManagement.objects.filter(user=self.request.user)
+
 class OrderViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
     """
