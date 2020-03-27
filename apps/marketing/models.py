@@ -44,7 +44,7 @@ class MarketingRelationship(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "{}".format(self.user.username,)
+        return "{}".format(self.user,)
 
 
 class Poster(models.Model):
@@ -80,7 +80,7 @@ class TeacherApplication(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.user.username
+        return str(self.user)
 
 
 class MarketerApplication(models.Model):
@@ -101,7 +101,7 @@ class MarketerApplication(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.user.username
+        return str(self.user)
 
 
 class MarketingCode(models.Model):
@@ -119,4 +119,4 @@ class MarketingCode(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.user) + ""+ self.code
+        return str(self.user) + " "+ self.code

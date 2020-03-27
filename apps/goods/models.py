@@ -88,7 +88,7 @@ class Lesson(models.Model):
         return self.video_set.all()
 
     def __str__(self):
-        return self.name
+        return str(self.course) + " " +self.name
 
 
 class Video(models.Model):
@@ -104,7 +104,7 @@ class Video(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return str(self.lesson)+ " " +self.name
 
 
 class CourseResource(models.Model):
@@ -119,7 +119,7 @@ class CourseResource(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return str(self.course) + " " +self.name
 
 
 class Banner(models.Model):
@@ -137,7 +137,7 @@ class Banner(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.goods.name
+        return str(self.goods)
 
 
 class HotSearchWords(models.Model):

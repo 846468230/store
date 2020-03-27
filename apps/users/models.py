@@ -26,10 +26,7 @@ class UserProfile(AbstractUser):
         verbose_name_plural = "用户"
 
     def __str__(self):
-        if self.name:
-            return self.name
-        else:
-            return self.username
+        return self.username + " " + str(self.name)
 
 
 class VerifyCode(models.Model):

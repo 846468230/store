@@ -23,7 +23,7 @@ class UserFav(models.Model):
         unique_together = ("user", "course")
 
     def __str__(self):
-        return self.user.name if self.user.name else self.user.username
+        return str(self.user)
 
 
 class UserAsk(models.Model):
@@ -37,6 +37,8 @@ class UserAsk(models.Model):
         verbose_name = '用户咨询'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name + " " +self.course.name
 
 class CourseComments(models.Model):
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE, help_text="用户id")
@@ -50,7 +52,7 @@ class CourseComments(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.course.name
+        return str(self.user) + " "+str(self.course)
 
 
 class UserLeavingMessage(models.Model):
@@ -78,7 +80,7 @@ class UserLeavingMessage(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.subject
+        return str(self.user) +" " +self.subject
 
 
 class UserMessage(models.Model):
@@ -110,7 +112,7 @@ class UserCourse(models.Model):
         unique_together = ("user", "course")
 
     def __str__(self):
-        return self.user.username + " " + self.course.name
+        return str(self.user) + " " + self.course.name
 
 
 class UserAddress(models.Model):
@@ -132,4 +134,4 @@ class UserAddress(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.address
+        return str(self.user)+ " " +self.address

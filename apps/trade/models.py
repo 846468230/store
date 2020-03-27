@@ -25,7 +25,7 @@ class ShoppingCart(models.Model):
         unique_together = ("user", "goods")
 
     def __str__(self):
-        return "%s(%d)"%(self.goods.name, self.nums)
+        return str(self.user) +" " +str(self.goods)
 
 
 class TeacherManagement(models.Model):
@@ -41,7 +41,7 @@ class TeacherManagement(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "%s"%(self.user.name if self.user.name else self.user.username,)
+        return str(self.user)
 
 
 class OrderInfo(models.Model):
@@ -64,7 +64,7 @@ class OrderInfo(models.Model):
                                   help_text="订单状态")
     post_script = models.CharField(max_length=200, verbose_name="订单留言", help_text="订单留言")
     order_mount = models.FloatField(default=0.0, verbose_name="订单金额", help_text="订单金额")
-    marketing_code = models.CharField(max_length=30, null=True, blank=True, unique=True, verbose_name="营销推广码", help_text="营销推广码")
+    marketing_code = models.CharField(max_length=30, null=True, blank=True, verbose_name="营销推广码", help_text="营销推广码")
     pay_time = models.DateTimeField(null=True, blank=True, verbose_name="支付时间", help_text="支付时间")
 
     # 用户信息
@@ -80,7 +80,7 @@ class OrderInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.user)+(self.order_sn if self.order_sn else " ")
+        return str(self.user)+" "+str(self.order_sn)
 
 
 class OrderGoods(models.Model):
@@ -99,4 +99,4 @@ class OrderGoods(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.order.order_sn)
+        return str(self.order.order_sn) + " " + str(self.goods)
