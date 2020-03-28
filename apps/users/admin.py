@@ -19,7 +19,6 @@ class VerifyCodeAdmin(admin.ModelAdmin):
 
 class UserChangeForm(UserChangeForm):
     username = forms.CharField(disabled=True,label="用户名")
-    session_key = forms.CharField(disabled=True,label="微信的session_key")
     class Meta(UserChangeForm.Meta):
         model = User
 
