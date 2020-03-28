@@ -23,8 +23,8 @@ admin_permissions = ['change_userprofile', 'add_userprofile', 'view_userprofile'
                      "change_hotsearchwords", "change_lesson", "change_video", "delete_banner", "delete_course",
                      "delete_coursecategory", "delete_courseresource", "delete_hotsearchwords", "delete_lesson",
                      "delete_video", "view_banner", "view_course", "view_coursecategory", "view_courseresource",
-                     "view_hotsearchwords", "view_lesson", "view_video"]
-marketer_permissions = []
+                     "view_hotsearchwords", "view_lesson", "view_video","add_marketerapplication","add_marketingrelationship","add_poster","add_teacherapplication","change_marketerapplication","change_marketerconfigs","change_marketingrelationship","change_poster","change_teacherapplication","delete_marketerapplication","delete_poster","delete_teacherapplication","view_marketerapplication","view_marketerconfigs","view_marketingcode","view_marketingrelationship","view_poster","view_teacherapplication"]
+marketer_permissions = ["add_marketingcode","delete_marketingcode","view_marketerapplication","view_marketingcode","view_marketingrelationship","view_poster"]
 teacher_permissions = ["view_userprofile", "view_usercourse", "view_coursecomments", "view_course",
                        "view_courseresource", "view_lesson", "view_video", "add_course",
                        "add_courseresource", "add_lesson", "add_video"]
@@ -36,7 +36,7 @@ member_permissions = ['view_userprofile', 'change_userprofile', "add_useraddress
                       "view_useraddress", "view_userask", "view_usercourse", "view_userfav", "view_userleavingmessage",
                       "view_usermessage", "add_shoppingcart", "change_shoppingcart", "delete_shoppingcart",
                       "view_ordergoods", "view_orderinfo", "view_shoppingcart", "view_banner", "view_course",
-                      "view_coursecategory", "view_courseresource", "view_hotsearchwords", "view_lesson", "view_video"]
+                      "view_coursecategory", "view_courseresource", "view_hotsearchwords", "view_lesson", "view_video","add_marketerapplication","add_teacherapplication","view_marketerapplication","view_teacherapplication"]
 for group in GROUPS:
     new_group, created = Group.objects.get_or_create(name=group)
 

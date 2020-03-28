@@ -35,10 +35,12 @@ def update_commission(parent_marketer,price):
     marketer_relationship = parent_marketer.user_marketer
     if not marketer_relationship.is_freeze:
         marketer_relationship.commission += price * marketer_relationship.config.factor_first
+        marketer_relationship.total_commission += price * marketer_relationship.config.factor_first
         marketer_relationship.save()
     parent_marketer = marketer_relationship.parent_marketer
     if parent_marketer and not parent_marketer.user_marketer.is_freeze:
         parent_marketer.user_marketer.commission += price * parent_marketer.user_marketer.config.factor_second
+        parent_marketer.user_marketer.total_commission += price * parent_marketer.user_marketer.config.factor_second
         parent_marketer.user_marketer.save()
 
 @receiver(post_save, sender=OrderInfo,dispatch_uid="marketer_commission_updated")
@@ -78,4 +80,5 @@ def update_teacher_commission(sender, instance=None, created=False, **kwargs):
                 price = course.price
                 teacher_commission = course.teacher.teacher_commission
                 teacher_commission.commission += price * teacher_commission.scale_factor
+                teacher_commission.total_commission += price * teacher_commission.scale_factor
                 teacher_commission.save()

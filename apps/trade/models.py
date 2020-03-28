@@ -34,6 +34,7 @@ class TeacherManagement(models.Model):
     """
     user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, help_text="用户id",related_name="teacher_commission")
     commission = models.FloatField(default=0.0, verbose_name="佣金金额", help_text="佣金金额")
+    total_commission = models.FloatField(default=0.0, verbose_name="历史总佣金", help_text="历史总佣金")
     scale_factor = models.FloatField(default=0.0)
 
     class Meta:
