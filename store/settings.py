@@ -36,6 +36,7 @@ AUTH_USER_MODEL = 'users.UserProfile'
 # Application definition
 
 INSTALLED_APPS = [
+    'extra_apps.simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',
     'apps.marketing.apps.MarketingConfig',
+    'import_export',
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 MIDDLEWARE = [
@@ -138,6 +140,7 @@ REST_FRAMEWORK = {
 
 }
 
+ADMIN_LIST_PER_PAGE = 40
 #DRF拓展
 REST_FRAMEWORK_EXTENSIONS = {
     # 缓存时间
@@ -216,10 +219,152 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+# simpleui
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_HOME_QUICK = True
+SIMPLEUI_ANALYSIS = False
+# 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
+SIMPLEUI_STATIC_OFFLINE = True
+SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['营销管理', '商品管理','交易管理', '用户操作管理','用户管理'],
+    'menus':[{
+        'app': 'trade',
+        'name': '交易管理',
+        'icon': 'far fa-file',
+        'models': [{
+            'name': '订单信息',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/orderinfo/'
+        },{
+            'name': '订单商品',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/ordergoods/'
+        },{
+            'name': '购物车',
+            'icon': 'icon fas fa-shopping-cart',
+            'url': 'trade/shoppingcart/'
+        },]
+    },{
+        'app': 'marketing',
+        'name': '用户操作管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '用户地址',
+            'icon': 'icon fas fa-truck',
+            'url': 'user_operation/useraddress/'
+        },{
+            'name': '用户咨询',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/userask/'
+        },{
+            'name': '用户消息',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/usermessage/'
+        },{
+            'name': '用户留言',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/userleavingmessage/'
+        },{
+            'name': '用户课程',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/usercourse/'
+        },{
+            'name': '用户收藏',
+            'icon': 'far fa-user',
+            'url': 'user_operation/userfav/'
+        },{
+            'name': '用户评论',
+            'icon': 'fas fa-book',
+            'url': 'user_operation/coursecomments/'
+        }]
+    },{
+        'app': 'marketing',
+        'name': '营销管理',
+        'icon': 'icon far fa-file',
+        'models': [{
+            'name': '营销关系',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingrelationship/'
+        },{
+            'name': '营销海报',
+            'icon': 'fa fa-user',
+            'url': 'marketing/poster/'
+        },{
+            'name': '营销推广码',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingcode/'
+        },{
+            'name': '营销系数配置',
+            'icon': 'far fa-file',
+            'url': 'marketing/marketerconfigs/'
+        },]
+    },{
+        'app': 'goods',
+        'name': '商品管理',
+        'icon': 'fas fa-shopping-cart',
+        'models': [{
+            'name': '课程类别',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/coursecategory/'
+        },{
+            'name': '课程信息',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/course/'
+        },{
+            'name': '课程章节',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/lesson/'
+        },{
+            'name': '课程视频',
+            'icon': 'icon fas fa-film',
+            'url': 'goods/video/'
+        },{
+            'name': '课程资源',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/courseresource/'
+        },{
+            'name': '轮播课程',
+            'icon': 'fas fa-ad',
+            'url': 'goods/banner/'
+        }]
+    },{
+        'app': 'users',
+        'name': '用户管理',
+        'icon': 'fas fa-user-shield',
+        'models': [{
+            'name': '用户',
+            'icon': 'fa fa-user',
+            'url': 'users/userprofile/'
+        },{
+            'name': '营销人员申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/marketerapplication/'
+        },{
+            'name': '导师身份申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/teacherapplication/'
+        },{
+            'name': '教师佣金记录',
+            'icon': 'icon far fa-file',
+            'url': 'trade/teachermanagement/'
+        },{
+            'name': '组',
+            'icon': 'fas fa-users-cog',
+            'url': 'auth/group/'
+        },{
+            'name': '短信验证码',
+            'icon': 'icon far fa-comment-dots',
+            'url': 'users/verifycode/'
+        }]
+    },]
+}
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-Hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -231,12 +376,13 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'staticfiles'),
+#)
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
