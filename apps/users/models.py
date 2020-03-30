@@ -17,6 +17,8 @@ class UserProfile(AbstractUser):
                               verbose_name="性别",help_text="用户性别 male female")
     mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="电话",help_text="电话号码 最大11位")
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
+    openid = models.CharField(null=True, blank=True, max_length=30, verbose_name="微信openid",
+                                   help_text="微信openid")
     session_key = models.CharField(null=True,blank=True,max_length=30,verbose_name="微信session_key",help_text="微信的session_key")
     id_card_number = models.CharField(null=True, blank=True, max_length=20, verbose_name="身份证号码", help_text="身份证号码")
     id_card_front = models.ImageField(null=True, blank=True,upload_to='users/idcardsfront/', verbose_name='身份证正面', max_length=100, help_text="身份证正面")

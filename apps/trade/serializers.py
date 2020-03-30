@@ -5,8 +5,11 @@ from goods.serializers import CourseSerializer
 from trade.models import OrderInfo, OrderGoods
 from goods.serializers import CourseSerializer
 from utils.alipay import AliPay
-from store.settings import PRIVATE_KEY_PATH, ALIPAY_RETURN_URL, ALIPAY_NOTIFY_URL, ALI_PUB_KEY_PATH, DEBUG, ALI_APP_ID,ALIPAY_DEBUG_URL,ALIPAY_ONLINE_URL
-
+from store.settings import PRIVATE_KEY_PATH, ALIPAY_RETURN_URL, ALIPAY_NOTIFY_URL, ALI_PUB_KEY_PATH, DEBUG, ALI_APP_ID,ALIPAY_DEBUG_URL,ALIPAY_ONLINE_URL,WECHAT
+from django.shortcuts import render
+import requests
+import json
+from wechatpy import WeChatPay
 
 class TeacherManagementSerializer(serializers.Serializer):
     class Meta:
@@ -102,6 +105,21 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = OrderInfo
         fields = "__all__"
 
+def get_user_info(js_code):
+    """
+    使用 临时登录凭证code 获取 session_key 和 openid 等
+    支付部分仅需 openid，如需其他用户信息请按微信官方开发文档自行解密
+    """
+    req_params = {
+        'appid': WECHAT['APPID'],
+        'secret': WECHAT['APPSECRET'],
+        'js_code': js_code,
+        'grant_type': 'authorization_code',
+    }
+    user_info = requests.get('https://api.weixin.qq.com/sns/jscode2session',
+                                 params=req_params, timeout=3, verify=False)
+    print(user_info)
+    return user_info.json()
 
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
@@ -112,8 +130,9 @@ class OrderSerializer(serializers.ModelSerializer):
     trade_no = serializers.CharField(read_only=True)
     order_sn = serializers.CharField(read_only=True)
     pay_time = serializers.DateTimeField(read_only=True)
-    alipay_url = serializers.SerializerMethodField(read_only=True)
-
+    #alipay_url = serializers.SerializerMethodField(read_only=True)
+    weixinpay_url = serializers.SerializerMethodField(read_only=True)
+    '''
     def get_alipay_url(self, obj):
         alipay = AliPay(
             appid=ALI_APP_ID,
@@ -132,6 +151,27 @@ class OrderSerializer(serializers.ModelSerializer):
         re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
 
         return re_url
+    '''
+
+
+
+    def get_weixinpay_url(self, obj):
+        #openid = self.context['request'].user.openid
+        code = "0214ENwq1cfd7m0jMrvq1lh7xq14ENwc"
+        user_info = get_user_info(code)
+        print(user_info)
+        openid = user_info['openid']
+        pay = WeChatPay(WECHAT['APPID'], WECHAT['MERCHANT_KEY'], WECHAT['MCH_ID'])
+        order = pay.order.create(
+            trade_type=WECHAT['TRADE_TYPE'],  # 交易类型，小程序取值：JSAPI
+            body=obj.order_sn,  # 商品描述，商品简单描述
+            total_fee=obj.order_mount,  # 标价金额，订单总金额，单位为分
+            out_trade_no = obj.order_sn,
+            notify_url=WECHAT['NOTIFY_URL'],  # 通知地址，异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
+            user_id=openid  # 用户标识，trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。
+        )
+        wxpay_params = pay.jsapi.get_jsapi_params(order['prepay_id'])
+        return wxpay_params
 
     def generate_order_sn(self):
         # 当前时间+userid+随机数

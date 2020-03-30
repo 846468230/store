@@ -179,3 +179,71 @@ class AlipayView(APIView):
                 existed_order.save()
 
             return Response("success")
+
+from  django.http import HttpResponse
+from rest_framework import status
+import xmltodict
+
+class WixinpayView(APIView):
+    def get(self, request, format=None):
+        msg = request.body.decode('utf-8')
+        xmlmsg = xmltodict.parse(msg)
+        return_code = xmlmsg['xml']['return_code']
+
+        if return_code == 'FAIL':
+            # 官方发出错误
+            return HttpResponse("""<xml><return_code><![CDATA[FAIL]]></return_code>
+                                    <return_msg><![CDATA[Signature_Error]]></return_msg></xml>""",
+                                content_type='text/xml', status=200)
+        elif return_code == 'SUCCESS':
+            # 拿到这次支付的订单号
+            out_trade_no = xmlmsg['xml']['out_trade_no']
+            trade_no = xmlmsg['xml']['transaction_id']
+            order = OrderInfo.objects.get(order_sn=out_trade_no)
+            if xmlmsg['xml']['nonce_str'] != order.nonce_str:
+                # 随机字符串不一致
+                return HttpResponse("""<xml><return_code><![CDATA[FAIL]]></return_code>
+                                                <return_msg><![CDATA[Signature_Error]]></return_msg></xml>""",
+                                    content_type='text/xml', status=200)
+
+            # 根据需要处理业务逻辑
+            order.pay_status = return_code
+            order.trade_no = trade_no
+            order.pay_time = datetime.now()
+            order.save()
+
+            return HttpResponse("""<xml><return_code><![CDATA[SUCCESS]]></return_code>
+                                    <return_msg><![CDATA[OK]]></return_msg></xml>""",
+                                content_type='text/xml', status=200)
+
+    def post(self, request, format=None):
+        def get(self, request, format=None):
+            msg = request.body.decode('utf-8')
+            xmlmsg = xmltodict.parse(msg)
+            return_code = xmlmsg['xml']['return_code']
+
+            if return_code == 'FAIL':
+                # 官方发出错误
+                return HttpResponse("""<xml><return_code><![CDATA[FAIL]]></return_code>
+                                        <return_msg><![CDATA[Signature_Error]]></return_msg></xml>""",
+                                    content_type='text/xml', status=200)
+            elif return_code == 'SUCCESS':
+                # 拿到这次支付的订单号
+                out_trade_no = xmlmsg['xml']['out_trade_no']
+                trade_no = xmlmsg['xml']['transaction_id']
+                order = OrderInfo.objects.get(order_sn=out_trade_no)
+                if xmlmsg['xml']['nonce_str'] != order.nonce_str:
+                    # 随机字符串不一致
+                    return HttpResponse("""<xml><return_code><![CDATA[FAIL]]></return_code>
+                                                    <return_msg><![CDATA[Signature_Error]]></return_msg></xml>""",
+                                        content_type='text/xml', status=200)
+
+                # 根据需要处理业务逻辑
+                order.pay_status = return_code
+                order.trade_no = trade_no
+                order.pay_time = datetime.now()
+                order.save()
+
+                return HttpResponse("""<xml><return_code><![CDATA[SUCCESS]]></return_code>
+                                        <return_msg><![CDATA[OK]]></return_msg></xml>""",
+                                    content_type='text/xml', status=200)

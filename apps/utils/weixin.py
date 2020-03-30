@@ -102,6 +102,7 @@ class JSONWechatTokenSerializer(Serializer):
     def _get_or_create_user(openid, session_key):
         user, _ = User.objects.get_or_create(
             username=openid,
+            openid = openid,
             defaults={'password': openid}
         )
         user.set_password(openid)

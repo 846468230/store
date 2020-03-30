@@ -364,7 +364,7 @@ SIMPLEUI_CONFIG = {
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'zh-Hans'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -411,3 +411,13 @@ ALIPAY_NOTIFY_URL = "http://39.106.181.61:8000/alipay/return/"
 ALIPAY_RETURN_URL = "http://39.106.181.61:8000/alipay/return/"
 ALIPAY_DEBUG_URL = "https://openapi.alipaydev.com/gateway.do"
 ALIPAY_ONLINE_URL= "https://openapi.alipay.com/gateway.do"
+
+WECHAT = {
+        'APPID': 'wx09a82df3fbf9d3a9',                              # 小程序ID
+        'APPSECRET': 'a9bf876aaa883cf9af111eeb513eb029',			# 小程序SECRET
+        'MCH_ID': '1225312702',                                     # 商户号
+        'SPBILL_CREATE_IP': '39.106.181.61',                            # 终端IP
+        'NOTIFY_URL': 'http://39.106.181.61:8000/wxpayNotify',          # 通知地址
+        'TRADE_TYPE': 'JSAPI',                                      # 交易类型
+        'MERCHANT_KEY': 'e10adc3949ba59abbe56e057f20f883e',         # 商户KEY
+}
