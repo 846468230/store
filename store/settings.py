@@ -127,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.BasicAuthentication',
-                                       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+                                       #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
                                        'rest_framework.authentication.SessionAuthentication',],
     'DEFAULT_RENDERER_CLASSES': [
         'utils.render.EmberJSONRenderer',
