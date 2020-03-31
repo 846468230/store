@@ -3,7 +3,7 @@
 
 from rest_framework_jwt.views import ObtainJSONWebToken
 
-# import emoji as emoji
+#import emoji as emoji
 import requests
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
@@ -12,37 +12,34 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework_jwt.compat import get_username_field
 from rest_framework_jwt.settings import api_settings
 from rest_framework import viewsets
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin,RetrieveModelMixin
+from rest_framework.response import Response
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+from store.settings import WECHAT
+import emoji
+from rest_framework import status
 User = get_user_model()
+from rest_framework import views
 from users.serializers import GroupSerializer,UserDetailSerializer
-class Serializer(serializers.Serializer):
-    @property
-    def object(self):
-        return self.validated_data
 
 
-class JSONWechatTokenSerializer(Serializer):
+
+class JSONWechatTokenSerializer(serializers.Serializer):
     """
     通过小程序post请求发送code, 经JSONWechatTokenSerializer验证后返回
     openid和session_key.
     使用用户标识openid生成一个user实例, 方便视图对用户权限的管理.
     """
 
-    def __init__(self, *args, **kwargs):
-        super(JSONWechatTokenSerializer, self).__init__(*args, **kwargs)
-        self.fields['code'] = serializers.CharField()
-        """
-        userinfo的信息存在此处
-        """
-        # self.fields['nickName'] = serializers.CharField(allow_null=True, )
-        # self.fields['gender'] = serializers.IntegerField(allow_null=True, )
-        # self.fields['language'] = serializers.CharField(allow_null=True, )
-        # self.fields['city'] = serializers.CharField(allow_null=True, )
-        # self.fields['province'] = serializers.CharField(allow_null=True)
-        # self.fields['country'] = serializers.CharField(allow_null=True, )
-        # self.fields['avatarUrl'] = serializers.CharField(allow_null=True, )
+    code = serializers.CharField()
+    nickName = serializers.CharField(allow_null=True, )
+    gender = serializers.CharField(allow_null=True, )
+    language = serializers.CharField(allow_null=True, )
+    city = serializers.CharField(allow_null=True, )
+    province = serializers.CharField(allow_null=True)
+    country = serializers.CharField(allow_null=True, )
+    avatarUrl = serializers.CharField(allow_null=True, )
 
     @property
     def username_field(self):
@@ -57,7 +54,7 @@ class JSONWechatTokenSerializer(Serializer):
         self._update_userinfo(user, attrs)
         credentials = {
             self.username_field: attrs.get(self.username_field),
-            'password': attrs.get('password')
+            'password': attrs.get( 'password')
         }
 
         if all(credentials.values()):
@@ -74,7 +71,9 @@ class JSONWechatTokenSerializer(Serializer):
                     'groups': GroupSerializer(user.groups.all(), many=True).data,
                     'permissions':User.get_all_permissions(user)
                 }
-                return data_dict.update(UserDetailSerializer(user))
+                data_dict.update(UserDetailSerializer(user).data)
+                attrs.update(data_dict)
+                return attrs
             else:
                 msg = _('账号或密码不正确')
                 raise serializers.ValidationError(msg)
@@ -82,21 +81,11 @@ class JSONWechatTokenSerializer(Serializer):
             msg = _('必须包含用户信息或者code')
             raise serializers.ValidationError(msg)
 
-    # @staticmethod
-    # def _update_userinfo(user, attrs):
-    #     try:
-    #         UserInfo.objects.filter(user=user).update(avatar_url=attrs.get('avatarUrl'), gender=attrs.get('gender'),
-    #                                                   province=attrs.get('province'), city=attrs.get('city'),
-    #                                                   country=attrs.get('country'),
-    #                                                   nick_name=emoji.demojize(attrs.get('nickName')),
-    #                                                   language=attrs.get('language'))
-    #     except Exception as e:
-    #         """
-    #         无测试，故放入此try"""
-    #         print(e, 111)
-    #         UserInfo.objects.create(user=user, avatar_url=attrs.get('avatarUrl'), gender=attrs.get('gender'),
-    #                                 province=attrs.get('province'), city=attrs.get('city'),
-    #                                 country=attrs.get('country'), nick_name=emoji.demojize(attrs.get('nickName')))
+    @staticmethod
+    def _update_userinfo(user, attrs):
+        gender = attrs.get('gender')
+        gender = 'male' if int(gender) == 1 else 'female'
+        User.objects.filter(id=user.id).update(gender=gender,nickname=emoji.demojize(attrs.get('nickName')),)
 
     @staticmethod
     def _get_or_create_user(openid, session_key):
@@ -106,16 +95,17 @@ class JSONWechatTokenSerializer(Serializer):
             defaults={'password': openid}
         )
         user.set_password(openid)
-        user.first_name = session_key
+        user.session_key = session_key
         user.save()
         return user
+
 
     @staticmethod
     def _credentials_validation(code):
         # 成功拿到openid和session_key并返回
         req_params = {
-            'appid': settings.APP_ID,
-            'secret': settings.APP_SECRET,
+            'appid': WECHAT['APPID'],
+            'secret': WECHAT['APPSECRET'],
             'js_code': code,
             'grant_type': 'authorization_code'
         }
@@ -130,10 +120,12 @@ class JSONWechatTokenSerializer(Serializer):
         return result
 
 
-class ObtainJSONWechatToken(CreateModelMixin, viewsets.GenericViewSet):
-    serializer_class = JSONWechatTokenSerializer
-    def get_object(self):
-        return self.request.user
+class ObtainJSONWechatToken(views.APIView):
+    def post(self,request):
+        serializer = JSONWechatTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 obtain_jwt_token = ObtainJSONWechatToken

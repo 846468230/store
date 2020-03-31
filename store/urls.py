@@ -39,7 +39,7 @@ router.register('codes', SmsCodeViewset, basename='codes')
 # 用户注册
 router.register('user', UserViewSet, basename="register")
 # 微信登录
-router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
+#router.register('login_weixin',ObtainJSONWechatToken,basename="wechat_login")
 # 用户收藏
 router.register('userfav',UserFavViewSet,basename="userfav")
 # 用户留言
@@ -78,5 +78,5 @@ urlpatterns = [
                   path('login/', obtain_jwt_token),
                   path('alipay/return/',AlipayView.as_view()),
                   path('', include('social_django.urls', namespace='social')),
-                  #path('login_weixin/',ObtainJSONWechatToken),
+                  path('login_weixin/',ObtainJSONWechatToken.as_view()),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
