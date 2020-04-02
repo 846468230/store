@@ -130,9 +130,9 @@ class OrderSerializer(serializers.ModelSerializer):
     trade_no = serializers.CharField(read_only=True)
     order_sn = serializers.CharField(read_only=True)
     pay_time = serializers.DateTimeField(read_only=True)
-    #alipay_url = serializers.SerializerMethodField(read_only=True)
-    weixinpay_url = serializers.SerializerMethodField(read_only=True)
-    '''
+    alipay_url = serializers.SerializerMethodField(read_only=True)
+    #weixinpay_url = serializers.SerializerMethodField(read_only=True)
+
     def get_alipay_url(self, obj):
         alipay = AliPay(
             appid=ALI_APP_ID,
@@ -151,7 +151,6 @@ class OrderSerializer(serializers.ModelSerializer):
         re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
 
         return re_url
-    '''
 
 
 

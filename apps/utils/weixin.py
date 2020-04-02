@@ -54,7 +54,7 @@ class JSONWechatTokenSerializer(serializers.Serializer):
         result = self._credentials_validation(code)
         user = self._get_or_create_user(result['openid'], result['session_key'])
         r = urlopen(attrs.get('avatarUrl'))
-        user.avatar.save("{}_{}".format(user.id,int(time.time())),File(BytesIO(r.read())))
+        user.avatar.save("{}_{}.jpg".format(user.id,int(time.time())),File(BytesIO(r.read())))
         attrs['username'] = result['openid']
         attrs['password'] = result['openid']
         self._update_userinfo(user, attrs)
@@ -77,7 +77,7 @@ class JSONWechatTokenSerializer(serializers.Serializer):
                     'groups': GroupSerializer(user.groups.all(), many=True).data,
                     'permissions':User.get_all_permissions(user)
                 }
-                data_dict.update(UserDetailSerializer(user).data)
+                data_dict.update(UserDetailSerializer(user,context=self.context).data)
                 attrs.update(data_dict)
                 return attrs
             else:
@@ -130,7 +130,7 @@ class JSONWechatTokenSerializer(serializers.Serializer):
 
 class ObtainJSONWechatToken(views.APIView):
     def post(self,request):
-        serializer = JSONWechatTokenSerializer(data=request.data)
+        serializer = JSONWechatTokenSerializer(data=request.data,context={"request":request})
         if serializer.is_valid():
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
