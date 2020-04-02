@@ -33,7 +33,7 @@ class UserAdmin(UserAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('name', 'nickname', 'avatar','birthday','gender','mobile','email','session_key','id_card_number','id_card_front','id_card_back')}),
+        (_('Personal info'), {'fields': ('name', 'nickname', 'avatar','birthday','gender','mobile','email','session_key','openid','id_card_number','id_card_front','id_card_back')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),

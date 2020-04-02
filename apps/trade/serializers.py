@@ -156,11 +156,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
     def get_weixinpay_url(self, obj):
-        #openid = self.context['request'].user.openid
-        code = "0214ENwq1cfd7m0jMrvq1lh7xq14ENwc"
-        user_info = get_user_info(code)
-        print(user_info)
-        openid = user_info['openid']
+        openid = self.context['request'].user.openid
+        #code = "0214ENwq1cfd7m0jMrvq1lh7xq14ENwc"
+        #user_info = get_user_info(code)
+        #print(user_info)
+        #openid = user_info['openid']
         pay = WeChatPay(WECHAT['APPID'], WECHAT['MERCHANT_KEY'], WECHAT['MCH_ID'])
         order = pay.order.create(
             trade_type=WECHAT['TRADE_TYPE'],  # 交易类型，小程序取值：JSAPI

@@ -21,6 +21,10 @@ import emoji
 from rest_framework import status
 User = get_user_model()
 from rest_framework import views
+from django.core.files import File
+from io import BytesIO
+import time
+from urllib.request import urlopen
 from users.serializers import GroupSerializer,UserDetailSerializer
 
 
@@ -49,6 +53,8 @@ class JSONWechatTokenSerializer(serializers.Serializer):
         code = attrs.get('code')
         result = self._credentials_validation(code)
         user = self._get_or_create_user(result['openid'], result['session_key'])
+        r = urlopen(attrs.get('avatarUrl'))
+        user.avatar.save("{}_{}".format(user.id,int(time.time())),File(BytesIO(r.read())))
         attrs['username'] = result['openid']
         attrs['password'] = result['openid']
         self._update_userinfo(user, attrs)
@@ -89,12 +95,14 @@ class JSONWechatTokenSerializer(serializers.Serializer):
 
     @staticmethod
     def _get_or_create_user(openid, session_key):
-        user, _ = User.objects.get_or_create(
+        user, created = User.objects.get_or_create(
             username=openid,
             openid = openid,
             defaults={'password': openid}
         )
-        user.set_password(openid)
+        if created:
+            user.set_password(openid)
+
         user.session_key = session_key
         user.save()
         return user
