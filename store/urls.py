@@ -26,7 +26,7 @@ from rest_framework.authtoken import views
 from utils.JSONWebTokenAPIView import obtain_jwt_token
 from utils.weixin import ObtainJSONWechatToken
 from trade.views import ShoppingCartViewSet,OrderViewset,AlipayView
-from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet,UserCourseViewSet
+from user_operation.views import UserFavViewSet,UserLeavingMessageViewSet,UserAddressViewSet,UserCourseViewSet,UserCashWithDrawViewSet
 from marketing.views import MarketingRelationshipViewSet,PosterViewSet,TeacherApplicationViewSet,MarketerApplicationViewSet,MarketingCodeViewSet
 from trade.views import TeacherManagementViewSet
 router = DefaultRouter()
@@ -68,6 +68,8 @@ router.register('marketer_application',MarketerApplicationViewSet,basename="mark
 router.register('teacher_commission',TeacherManagementViewSet,basename="teacher_commission")
 # 营销推广码
 router.register('marketing_code',MarketingCodeViewSet,basename='marketing_code')
+# 提现申请
+router.register('cash_withdraw',UserCashWithDrawViewSet,basename="cash_withdraw")
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),

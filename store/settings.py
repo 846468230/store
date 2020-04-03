@@ -229,7 +229,7 @@ SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
 SIMPLEUI_CONFIG = {
     'system_keep': False,
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
-    'menu_display': ['营销管理', '商品管理','交易管理', '用户操作管理','用户管理'],
+    'menu_display': ['营销管理', '商品管理','交易管理', '会员操作管理','课程代表老师管理','财务管理','用户管理'],
     'menus':[{
         'app': 'trade',
         'name': '交易管理',
@@ -249,34 +249,34 @@ SIMPLEUI_CONFIG = {
         },]
     },{
         'app': 'marketing',
-        'name': '用户操作管理',
+        'name': '会员操作管理',
         'icon': 'fas fa-user',
         'models': [{
-            'name': '用户地址',
+            'name': '会员地址',
             'icon': 'icon fas fa-truck',
             'url': 'user_operation/useraddress/'
         },{
-            'name': '用户咨询',
+            'name': '会员咨询',
             'icon': 'icon far fa-user',
             'url': 'user_operation/userask/'
         },{
-            'name': '用户消息',
+            'name': '会员消息',
             'icon': 'icon far fa-user',
             'url': 'user_operation/usermessage/'
         },{
-            'name': '用户留言',
+            'name': '会员留言',
             'icon': 'icon far fa-user',
             'url': 'user_operation/userleavingmessage/'
         },{
-            'name': '用户课程',
+            'name': '会员课程',
             'icon': 'icon far fa-user',
             'url': 'user_operation/usercourse/'
         },{
-            'name': '用户收藏',
+            'name': '会员收藏',
             'icon': 'far fa-user',
             'url': 'user_operation/userfav/'
         },{
-            'name': '用户评论',
+            'name': '会员评论',
             'icon': 'fas fa-book',
             'url': 'user_operation/coursecomments/'
         }]
@@ -285,10 +285,6 @@ SIMPLEUI_CONFIG = {
         'name': '营销管理',
         'icon': 'icon far fa-file',
         'models': [{
-            'name': '营销关系',
-            'icon': 'fa fa-user',
-            'url': 'marketing/marketingrelationship/'
-        },{
             'name': '营销海报',
             'icon': 'fa fa-user',
             'url': 'marketing/poster/'
@@ -296,10 +292,6 @@ SIMPLEUI_CONFIG = {
             'name': '营销推广码',
             'icon': 'fa fa-user',
             'url': 'marketing/marketingcode/'
-        },{
-            'name': '营销系数配置',
-            'icon': 'far fa-file',
-            'url': 'marketing/marketerconfigs/'
         },]
     },{
         'app': 'goods',
@@ -331,6 +323,40 @@ SIMPLEUI_CONFIG = {
             'url': 'goods/banner/'
         }]
     },{
+        'app': 'management',
+        'name': '课程代表老师管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '课程代表申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/marketerapplication/'
+        },{
+            'name': '申请成为老师',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/teacherapplication/'
+        },{
+            'name': '教师佣金记录',
+            'icon': 'icon far fa-file',
+            'url': 'trade/teachermanagement/'
+        },{
+            'name': '营销关系',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingrelationship/'
+        },{
+            'name': '营销系数配置',
+            'icon': 'far fa-file',
+            'url': 'marketing/marketerconfigs/'
+        }]
+    },{
+        'app': 'financial_management',
+        'name': '财务管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '取现申请',
+            'icon': 'far fa-file',
+            'url': 'user_operation/usercashwithdrawal/'
+        },]
+    },{
         'app': 'users',
         'name': '用户管理',
         'icon': 'fas fa-user-shield',
@@ -338,18 +364,6 @@ SIMPLEUI_CONFIG = {
             'name': '用户',
             'icon': 'fa fa-user',
             'url': 'users/userprofile/'
-        },{
-            'name': '营销人员申请',
-            'icon': 'icon far fa-file',
-            'url': 'marketing/marketerapplication/'
-        },{
-            'name': '导师身份申请',
-            'icon': 'icon far fa-file',
-            'url': 'marketing/teacherapplication/'
-        },{
-            'name': '教师佣金记录',
-            'icon': 'icon far fa-file',
-            'url': 'trade/teachermanagement/'
         },{
             'name': '组',
             'icon': 'fas fa-users-cog',

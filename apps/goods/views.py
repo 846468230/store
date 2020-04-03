@@ -30,7 +30,7 @@ class BannerListViewSet(CacheResponseMixin, mixins.ListModelMixin, viewsets.Gene
     """
     serializer_class = BannerSerializer
     queryset = Banner.objects.all().order_by("index")
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    #throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
 
 class CourseCategoryListView(CacheResponseMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -44,7 +44,7 @@ class CourseCategoryListView(CacheResponseMixin, mixins.ListModelMixin, mixins.R
     queryset = CourseCategory.objects.all()
     filter_backends = [DjangoFilterBackend]
     filter_class = CategoryFilter
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    #throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -88,7 +88,7 @@ class CourseListViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.Retrie
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CourseListSetPagination
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    #throttle_classes = [AnonRateThrottle, UserRateThrottle]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filter_class = CourseFilter
     search_fields = ['name', 'desc', 'detail', 'tag']

@@ -1,5 +1,8 @@
 from rest_framework import permissions
-from user_operation.models import UserCourse
+from user_operation.models import UserCourse,UserCashWithdrawal
+from marketing.models import MarketingRelationship
+from trade.models import TeacherManagement
+from django.contrib.auth.models import Group
 from goods.models import Course
 
 
@@ -32,3 +35,26 @@ class boughtOrOwnerOrAdmin(permissions.BasePermission):
             return False
         return boughtOrOwnerOrAdmin.is_admin(request.user) or UserCourse.objects.filter(
             course=obj.course).exists() or Course.objects.filter(teacher=request.user)
+
+
+class teacherOrmarketerAndEnough(permissions.BasePermission):
+    message = '请确认您是否是导师或营销人员，且账户中佣金数目充足'
+
+    def has_object_permission(self, request, view, obj):
+        return True
+        user = obj.user
+        apply_category = obj.apply_category
+        if apply_category == UserCashWithdrawal.WITHDRWAL_CHOICES[0][0]:
+            if not user.groups.filter(name="marketer").exists():
+                return False
+            if user.user_marketer.commission < obj.amount:
+                return False
+            return True
+        elif apply_category == UserCashWithdrawal.WITHDRWAL_CHOICES[1][0]:
+            if not user.groups.filter(name="teacher").exists():
+                return False
+            if user.teacher_commission.commission < obj.amount:
+                return False
+            return True
+        else:
+            return False

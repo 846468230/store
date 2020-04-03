@@ -32,7 +32,7 @@ class MarketingRelationship(models.Model):
                              related_name="user_marketer")
     commission = models.FloatField(default=0.0, verbose_name="营销佣金", help_text="营销佣金")
     total_commission = models.FloatField(default=0.0, verbose_name="历史营销总佣金", help_text="历史营销总佣金")
-    parent_marketer = models.ForeignKey(User, null=True, blank=True, verbose_name="营销上级", help_text="营销上级",
+    parent_marketer = models.ForeignKey(User, null=True, blank=True, verbose_name="课程主管", help_text="营销上级",
                                         related_name="sub_marketer", on_delete=models.SET_NULL)
     config = models.ForeignKey(MarketerConfigs, blank=True, null=True, verbose_name="佣金配置", help_text="佣金配置",
                                on_delete=models.SET_NULL)

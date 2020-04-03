@@ -82,6 +82,43 @@ class UserLeavingMessage(models.Model):
     def __str__(self):
         return str(self.user) +" " +self.subject
 
+class UserCashWithdrawal(models.Model):
+    """
+        用户取现
+    """
+    WITHDRWAL_CHOICES = (
+        (1, "营销佣金取现"),
+        (2, "教师佣金取现"),
+    )
+    APPLICATION_STATUS = (
+        ("SUCCESS", "申请成功"),
+        ("REJECT", "申请拒绝"),
+        ("APPLYING", "申请中"),
+    )
+    WITHDRAW_STATUS = (
+        ("TRADE_SUCCESS", "成功"),
+        ("TRADE_CLOSED", "超时关闭"),
+        ("WAIT_BUYER_PAY", "交易创建"),
+        ("TRADE_FINISHED", "交易结束"),
+        ("paying", "待付款"),
+    )
+    user = models.ForeignKey(User, verbose_name="申请用户", on_delete=models.CASCADE, help_text="用户id",
+                             related_name="application_user")
+    apply_category = models.IntegerField(choices=WITHDRWAL_CHOICES,verbose_name="取现类型",help_text="取现类型")
+    apply_status = models.CharField(choices=APPLICATION_STATUS, default="APPLYING", max_length=30, verbose_name="申请状态",
+                                    help_text="申请状态")
+    withdraw_status = models.CharField(choices=WITHDRAW_STATUS, default="paying", max_length=30, verbose_name="提取状态",
+                     help_text="提取状态")
+    amount = models.FloatField(default=0.0,verbose_name="取现金额",help_text="取现金额")
+    added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间', help_text="创建时间")
+    updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间', help_text="更新时间")
+
+    class Meta:
+        verbose_name = "取现申请"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return str(self.user)
 
 class UserMessage(models.Model):
     # 如果 为 0 代表全局消息，否则就是用户的 ID
