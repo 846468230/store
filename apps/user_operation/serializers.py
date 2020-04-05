@@ -60,7 +60,7 @@ class UserAddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAddress
-        fields = ['user', 'province', "city", "district", "address", "signer_name", "signer_mobile", "added_datetime"]
+        fields = ['id','user','is_default', 'province', "city", "district", "address", "signer_name", "signer_mobile", "added_datetime"]
 
 
 class UserCourseListSerializer(serializers.Serializer):

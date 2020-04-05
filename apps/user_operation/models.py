@@ -157,6 +157,7 @@ class UserAddress(models.Model):
     用户收货地址
     """
     user = models.ForeignKey(User, verbose_name="用户", on_delete=models.CASCADE, help_text="用户id")
+    is_default = models.BooleanField(default=False, verbose_name="是否默认地址",help_text="是否默认地址")
     province = models.CharField(max_length=100, default="", verbose_name="省份", help_text="省份")
     city = models.CharField(max_length=100, default="", verbose_name="城市", help_text="城市")
     district = models.CharField(max_length=100, default="", verbose_name="区域", help_text="区域")
