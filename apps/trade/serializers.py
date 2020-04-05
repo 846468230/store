@@ -21,13 +21,14 @@ class ShoppingCartDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingCart
-        fields = ["goods", "nums"]
+        fields = ["goods",'buy_it', "nums"]
 
 
 class ShoppingCartSerializer(serializers.Serializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault(), help_text="当前用户id"
     )
+    buy_it =serializers.BooleanField(help_text="是否购买，默认为是")
     nums = serializers.IntegerField(required=True, label="商品数量", min_value=1, help_text="商品的数量，如果是线上课默认传1，后端处理报错",
                                     error_messages={
                                         "min_value": "商品数量不能小于一",

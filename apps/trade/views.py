@@ -53,13 +53,14 @@ class OrderViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
         order = serializer.save()
         shop_carts = ShoppingCart.objects.filter(user=self.request.user)
         for shop_cart in shop_carts:
-            order_goods = OrderGoods()
-            order_goods.goods = shop_cart.goods
-            order_goods.goods_num = shop_cart.nums
-            order_goods.order = order
-            order_goods.save()
+            if shop_cart.buy_it:
+                order_goods = OrderGoods()
+                order_goods.goods = shop_cart.goods
+                order_goods.goods_num = shop_cart.nums
+                order_goods.order = order
+                order_goods.save()
 
-            shop_cart.delete()
+                shop_cart.delete()
         return order
 
 

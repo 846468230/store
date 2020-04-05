@@ -14,6 +14,7 @@ class ShoppingCart(models.Model):
     """
     user = models.ForeignKey(User, verbose_name="用户", on_delete=models.CASCADE, help_text="用户id")
     goods = models.ForeignKey(Course, verbose_name="商品", on_delete=models.CASCADE, help_text="课程id")
+    buy_it = models.BooleanField(default=True, verbose_name="是否购买", help_text="是否购买")
     nums = models.IntegerField(default=0, verbose_name="购买数量", help_text="购买数量默认设置为1")
 
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间', help_text="创建时间")
