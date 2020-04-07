@@ -74,7 +74,7 @@ class OrderInfo(models.Model):
     # 用户信息
     address = models.CharField(max_length=100, default="", verbose_name="收货地址", help_text="收货地址")
     signer_name = models.CharField(max_length=20, default="", verbose_name="签收人", help_text="签收人名称")
-    singer_mobile = models.CharField(max_length=11, verbose_name="联系电话", help_text="签收人联系电话")
+    signer_mobile = models.CharField(max_length=11, verbose_name="联系电话", help_text="签收人联系电话")
 
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间', help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间', help_text="更新时间")
