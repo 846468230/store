@@ -13,7 +13,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 class VideoIdSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = "__all__"
+        exclude = ['video_file']
         model = Video
 
 

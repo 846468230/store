@@ -7,7 +7,7 @@ User = get_user_model()
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         g = Group.objects.get(name="member")
-        password = instance.password
-        instance.set_password(password)
+        #password = instance.password
+        #instance.set_password(password)
         instance.save()
         instance.groups.add(g)

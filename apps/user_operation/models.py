@@ -87,7 +87,7 @@ class UserCashWithdrawal(models.Model):
         用户取现
     """
     WITHDRWAL_CHOICES = (
-        (1, "营销佣金取现"),
+        (1, "课程代表佣金取现"),
         (2, "教师佣金取现"),
     )
     APPLICATION_STATUS = (

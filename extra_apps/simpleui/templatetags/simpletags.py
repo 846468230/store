@@ -172,6 +172,25 @@ def format_table(dict):
     return format_html(html)
 
 
+def is_admin(user):
+    return user.groups.filter(name="admin").exists()
+
+
+def is_marketer(user):
+    return user.groups.filter(name="marketer").exists()
+
+
+def is_course_manager(user):
+    return user.groups.filter(name="course_manager").exists()
+
+
+def is_financial_manager(user):
+    return user.groups.filter(name="financial_manager").exists()
+
+
+def is_market_manager(user):
+    return user.groups.filter(name="market_manager").exists()
+
 @register.simple_tag(takes_context=True)
 def menus(context, _get_config=None):
     data = []
@@ -184,9 +203,18 @@ def menus(context, _get_config=None):
     if not config:
         config = {}
 
+    user = context.get('request').user
     if config.get('dynamic', False) is True:
-        config = _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_CONFIG
-
+        if is_admin(user):
+            config = _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_CONFIG
+        elif is_course_manager(user):
+            config = _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_COURSE_MANAGER
+        elif is_market_manager(user):
+            config = _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_MARKET_MANAGE_CONFIG
+        elif is_marketer(user):
+            config = _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_MARKETING_CONFIG
+        elif is_financial_manager(user):
+            config =  _import_reload(_get_config('DJANGO_SETTINGS_MODULE')).SIMPLEUI_FINANCIAL_MANAGER_CONFIG
     app_list = context.get('app_list')
     for app in app_list:
         _models = [

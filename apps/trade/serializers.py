@@ -58,13 +58,34 @@ class ShoppingCartSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         # 修改商品数量
-        if instance.goods.online:
+        nums = validated_data["nums"]
+        if instance.goods.online and nums != 1:
             raise serializers.ValidationError({
-                'num': '线上课程数目只能为1'
+                'nums': '线上课程数目只能为1'
             })
         else:
-            instance.nums = validated_data["nums"]
+            from rest_framework.utils import model_meta
+            info = model_meta.get_field_info(instance)
+            # Simply set each attribute on the instance, and then save it.
+            # Note that unlike `.create()` we don't need to treat many-to-many
+            # relationships as being a special case. During updates we already
+            # have an instance pk for the relationships to be associated with.
+            m2m_fields = []
+            for attr, value in validated_data.items():
+                if attr in info.relations and info.relations[attr].to_many:
+                    m2m_fields.append((attr, value))
+                else:
+                    setattr(instance, attr, value)
+
             instance.save()
+
+            # Note that many-to-many fields are set after updating instance.
+            # Setting m2m fields triggers signals which could potentially change
+            # updated instance and we do not want it to collide with .update()
+            for attr, value in m2m_fields:
+                field = getattr(instance, attr)
+                field.set(value)
+
         return instance
 
 
@@ -77,7 +98,7 @@ class OrderGoodsSerializer(serializers.ModelSerializer):
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-    goods = OrderGoodsSerializer(many=True)
+    ordergoods = OrderGoodsSerializer(many=True)
     alipay_url = serializers.SerializerMethodField(read_only=True)
 
     def get_alipay_url(self, obj):

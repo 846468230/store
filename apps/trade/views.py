@@ -47,6 +47,8 @@ class OrderViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Crea
     def get_serializer_class(self):
         if self.action == "retrieve":
             return OrderDetailSerializer
+        elif self.action == "list":
+            return OrderDetailSerializer
         return OrderSerializer
 
     def perform_create(self, serializer):

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.utils.translation import ugettext_lazy as _
 from goods.models import Course
 
 User = get_user_model()
@@ -26,17 +26,18 @@ class ShoppingCart(models.Model):
         unique_together = ("user", "goods")
 
     def __str__(self):
-        return str(self.user) +" " +str(self.goods)
+        return str(self.user) + " " + str(self.goods)
 
 
 class TeacherManagement(models.Model):
     """
     老师的佣金管理
     """
-    user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, help_text="用户id",related_name="teacher_commission")
+    user = models.OneToOneField(User, verbose_name="课程教师", on_delete=models.CASCADE, help_text="用户id",
+                                related_name="teacher_commission")
     commission = models.FloatField(default=0.0, verbose_name="佣金金额", help_text="佣金金额")
     total_commission = models.FloatField(default=0.0, verbose_name="历史总佣金", help_text="历史总佣金")
-    scale_factor = models.FloatField(default=0.0,verbose_name="佣金系数", help_text="佣金系数")
+    scale_factor = models.FloatField(default=0.0, verbose_name="佣金系数", help_text="佣金系数")
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间', help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间', help_text="更新时间")
 
@@ -53,7 +54,7 @@ class OrderInfo(models.Model):
     订单
     """
     ORDER_STATUS = (
-        ("TRADE_SUCCESS", "成功"),
+        ("TRADE_SUCCESS", "支付成功"),
         ("TRADE_CLOSED", "超时关闭"),
         ("WAIT_BUYER_PAY", "交易创建"),
         ("TRADE_FINISHED", "交易结束"),
@@ -76,7 +77,7 @@ class OrderInfo(models.Model):
     signer_name = models.CharField(max_length=20, default="", verbose_name="签收人", help_text="签收人名称")
     signer_mobile = models.CharField(max_length=11, verbose_name="联系电话", help_text="签收人联系电话")
 
-    added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间', help_text="创建时间")
+    added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间', help_text="更新时间")
 
     class Meta:
@@ -84,19 +85,37 @@ class OrderInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.user)+" "+str(self.order_sn)
+        return str(self.user) + " " + str(self.order_sn)
 
 
 class OrderGoods(models.Model):
     """
     订单的商品详情
     """
+    CONFIRM_STATUS = (
+        ("WAITING_LEARN", "未学习"),
+        ("LEARNED", "已学习"),
+        ("CANCELED", "已取消"),
+    )
     order = models.ForeignKey(OrderInfo, verbose_name="订单信息", related_name="ordergoods", on_delete=models.CASCADE)
     goods = models.ForeignKey(Course, verbose_name="商品", on_delete=models.CASCADE)
     goods_num = models.IntegerField(default=0, verbose_name="商品数量")
+    confirm = models.CharField(choices=CONFIRM_STATUS, default="WAITING_LEARN", max_length=30, verbose_name="核销",
+                               help_text="核销")
 
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间')
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    def name(self):
+        if self.order.user.name:
+            return self.order.user.name
+        return self.order.user.username
+
+    def id_card_number(self):
+        return self.order.user.id_card_number
+
+    name.short_description = _("用户名")
+    id_card_number.short_description = _("身份证号码")
 
     class Meta:
         verbose_name = "订单商品"

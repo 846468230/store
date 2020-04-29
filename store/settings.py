@@ -20,7 +20,6 @@ sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -127,8 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.BasicAuthentication',
-                                       #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-                                       'rest_framework.authentication.SessionAuthentication',],
+                                       # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+                                       'rest_framework.authentication.SessionAuthentication', ],
     'DEFAULT_RENDERER_CLASSES': [
         'utils.render.EmberJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -141,12 +140,12 @@ REST_FRAMEWORK = {
 }
 
 ADMIN_LIST_PER_PAGE = 40
-#DRF拓展
+# DRF拓展
 REST_FRAMEWORK_EXTENSIONS = {
     # 缓存时间
-    'DEFAULT_CACHE_RESPONSE_TIMEOUT':60,
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60,
     # 缓存存储
-    'DEFAULT_USE_CACHE':'default',
+    'DEFAULT_USE_CACHE': 'default',
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -219,162 +218,6 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
-# simpleui
-SIMPLEUI_HOME_INFO = False
-SIMPLEUI_HOME_QUICK = True
-SIMPLEUI_ANALYSIS = False
-# 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
-SIMPLEUI_STATIC_OFFLINE = True
-SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
-SIMPLEUI_CONFIG = {
-    'system_keep': False,
-    'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
-    'menu_display': ['营销管理', '商品管理','交易管理', '会员操作管理','课程代表老师管理','财务管理','用户管理'],
-    'menus':[{
-        'app': 'trade',
-        'name': '交易管理',
-        'icon': 'far fa-file',
-        'models': [{
-            'name': '订单信息',
-            'icon': 'icon fas fa-shopping-bag',
-            'url': 'trade/orderinfo/'
-        },{
-            'name': '订单商品',
-            'icon': 'icon fas fa-shopping-bag',
-            'url': 'trade/ordergoods/'
-        },{
-            'name': '购物车',
-            'icon': 'icon fas fa-shopping-cart',
-            'url': 'trade/shoppingcart/'
-        },]
-    },{
-        'app': 'marketing',
-        'name': '会员操作管理',
-        'icon': 'fas fa-user',
-        'models': [{
-            'name': '会员地址',
-            'icon': 'icon fas fa-truck',
-            'url': 'user_operation/useraddress/'
-        },{
-            'name': '会员咨询',
-            'icon': 'icon far fa-user',
-            'url': 'user_operation/userask/'
-        },{
-            'name': '会员消息',
-            'icon': 'icon far fa-user',
-            'url': 'user_operation/usermessage/'
-        },{
-            'name': '会员留言',
-            'icon': 'icon far fa-user',
-            'url': 'user_operation/userleavingmessage/'
-        },{
-            'name': '会员课程',
-            'icon': 'icon far fa-user',
-            'url': 'user_operation/usercourse/'
-        },{
-            'name': '会员收藏',
-            'icon': 'far fa-user',
-            'url': 'user_operation/userfav/'
-        },{
-            'name': '会员评论',
-            'icon': 'fas fa-book',
-            'url': 'user_operation/coursecomments/'
-        }]
-    },{
-        'app': 'marketing',
-        'name': '营销管理',
-        'icon': 'icon far fa-file',
-        'models': [{
-            'name': '营销海报',
-            'icon': 'fa fa-user',
-            'url': 'marketing/poster/'
-        },{
-            'name': '营销推广码',
-            'icon': 'fa fa-user',
-            'url': 'marketing/marketingcode/'
-        },]
-    },{
-        'app': 'goods',
-        'name': '商品管理',
-        'icon': 'fas fa-shopping-cart',
-        'models': [{
-            'name': '课程类别',
-            'icon': 'icon fas fa-book',
-            'url': 'goods/coursecategory/'
-        },{
-            'name': '课程信息',
-            'icon': 'icon fas fa-book',
-            'url': 'goods/course/'
-        },{
-            'name': '课程章节',
-            'icon': 'icon fas fa-book',
-            'url': 'goods/lesson/'
-        },{
-            'name': '课程视频',
-            'icon': 'icon fas fa-film',
-            'url': 'goods/video/'
-        },{
-            'name': '课程资源',
-            'icon': 'icon fas fa-book',
-            'url': 'goods/courseresource/'
-        },{
-            'name': '轮播课程',
-            'icon': 'fas fa-ad',
-            'url': 'goods/banner/'
-        }]
-    },{
-        'app': 'management',
-        'name': '课程代表老师管理',
-        'icon': 'fas fa-user',
-        'models': [{
-            'name': '课程代表申请',
-            'icon': 'icon far fa-file',
-            'url': 'marketing/marketerapplication/'
-        },{
-            'name': '申请成为老师',
-            'icon': 'icon far fa-file',
-            'url': 'marketing/teacherapplication/'
-        },{
-            'name': '教师佣金记录',
-            'icon': 'icon far fa-file',
-            'url': 'trade/teachermanagement/'
-        },{
-            'name': '营销关系',
-            'icon': 'fa fa-user',
-            'url': 'marketing/marketingrelationship/'
-        },{
-            'name': '营销系数配置',
-            'icon': 'far fa-file',
-            'url': 'marketing/marketerconfigs/'
-        }]
-    },{
-        'app': 'financial_management',
-        'name': '财务管理',
-        'icon': 'fas fa-user',
-        'models': [{
-            'name': '取现申请',
-            'icon': 'far fa-file',
-            'url': 'user_operation/usercashwithdrawal/'
-        },]
-    },{
-        'app': 'users',
-        'name': '用户管理',
-        'icon': 'fas fa-user-shield',
-        'models': [{
-            'name': '用户',
-            'icon': 'fa fa-user',
-            'url': 'users/userprofile/'
-        },{
-            'name': '组',
-            'icon': 'fas fa-users-cog',
-            'url': 'auth/group/'
-        },{
-            'name': '短信验证码',
-            'icon': 'icon far fa-comment-dots',
-            'url': 'users/verifycode/'
-        }]
-    },]
-}
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -393,9 +236,9 @@ USE_TZ = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
-#STATICFILES_DIRS = (
+# STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'staticfiles'),
-#)
+# )
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -419,19 +262,350 @@ SOCIAL_AUTH_WEIXIN_SECRET = 'a9bf876aaa883cf9af111eeb513eb029'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
 
 ALI_APP_ID = "2016101800713621"
-ALI_PUB_KEY_PATH = os.path.join(BASE_DIR,'apps/trade/keys/alipay_key.txt')
-PRIVATE_KEY_PATH = os.path.join(BASE_DIR,'apps/trade/keys/private_key.txt')
+ALI_PUB_KEY_PATH = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key.txt')
+PRIVATE_KEY_PATH = os.path.join(BASE_DIR, 'apps/trade/keys/private_key.txt')
 ALIPAY_NOTIFY_URL = "http://39.106.181.61:8000/alipay/return/"
 ALIPAY_RETURN_URL = "http://39.106.181.61:8000/alipay/return/"
 ALIPAY_DEBUG_URL = "https://openapi.alipaydev.com/gateway.do"
-ALIPAY_ONLINE_URL= "https://openapi.alipay.com/gateway.do"
+ALIPAY_ONLINE_URL = "https://openapi.alipay.com/gateway.do"
+VOD_SECRETID = "AKID0OWQ4RfTN0A8qGQIvI28uRi8JGxPCWCd"
+VOD_SECRETKEY = "zrSnrjLho56rNcdPwDPQJ1UjkVzPcdP1"
 
 WECHAT = {
-        'APPID': 'wx09a82df3fbf9d3a9',                              # 小程序ID
-        'APPSECRET': 'a9bf876aaa883cf9af111eeb513eb029',			# 小程序SECRET
-        'MCH_ID': '1225312702',                                     # 商户号
-        'SPBILL_CREATE_IP': '39.106.181.61',                            # 终端IP
-        'NOTIFY_URL': 'http://39.106.181.61:8000/wxpayNotify',          # 通知地址
-        'TRADE_TYPE': 'JSAPI',                                      # 交易类型
-        'MERCHANT_KEY': 'e10adc3949ba59abbe56e057f20f883e',         # 商户KEY
+    'APPID': 'wx09a82df3fbf9d3a9',  # 小程序ID
+    'APPSECRET': 'a9bf876aaa883cf9af111eeb513eb029',  # 小程序SECRET
+    'MCH_ID': '1225312702',  # 商户号
+    'SPBILL_CREATE_IP': '39.106.181.61',  # 终端IP
+    'NOTIFY_URL': 'http://39.106.181.61:8000/wxpayNotify',  # 通知地址
+    'TRADE_TYPE': 'JSAPI',  # 交易类型
+    'MERCHANT_KEY': 'e10adc3949ba59abbe56e057f20f883e',  # 商户KEY
+}
+
+# simpleui
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_HOME_QUICK = True
+SIMPLEUI_ANALYSIS = False
+# 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
+SIMPLEUI_STATIC_OFFLINE = True
+SIMPLEUI_DEFAULT_THEME = 'admin.lte.css'
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['推广管理', '商品管理', '交易管理', '会员操作管理', '课程代表老师管理', '财务管理', '用户管理'],
+    'menus': [{
+        'app': 'trade',
+        'name': '交易管理',
+        'icon': 'far fa-file',
+        'models': [{
+            'name': '订单信息',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/orderinfo/'
+        }, {
+            'name': '订单商品',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/ordergoods/'
+        }, {
+            'name': '购物车',
+            'icon': 'icon fas fa-shopping-cart',
+            'url': 'trade/shoppingcart/'
+        }, ]
+    }, {
+        'app': 'marketing',
+        'name': '会员操作管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '会员地址',
+            'icon': 'icon fas fa-truck',
+            'url': 'user_operation/useraddress/'
+        }, {
+            'name': '会员咨询',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/userask/'
+        }, {
+            'name': '会员消息',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/usermessage/'
+        }, {
+            'name': '会员留言',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/userleavingmessage/'
+        }, {
+            'name': '会员课程',
+            'icon': 'icon far fa-user',
+            'url': 'user_operation/usercourse/'
+        }, {
+            'name': '会员收藏',
+            'icon': 'far fa-user',
+            'url': 'user_operation/userfav/'
+        }, {
+            'name': '会员评论',
+            'icon': 'fas fa-book',
+            'url': 'user_operation/coursecomments/'
+        }]
+    }, {
+        'app': 'marketing',
+        'name': '推广管理',
+        'icon': 'icon far fa-file',
+        'models': [{
+            'name': '推广海报',
+            'icon': 'fa fa-user',
+            'url': 'marketing/poster/'
+        }, {
+            'name': '课程推广码',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingcode/'
+        }, ]
+    }, {
+        'app': 'goods',
+        'name': '商品管理',
+        'icon': 'fas fa-shopping-cart',
+        'models': [{
+            'name': '课程类别',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/coursecategory/'
+        }, {
+            'name': '课程信息',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/course/'
+        }, {
+            'name': '课程章节',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/lesson/'
+        }, {
+            'name': '课程视频',
+            'icon': 'icon fas fa-film',
+            'url': 'goods/video/'
+        }, {
+            'name': '课程资源',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/courseresource/'
+        }, {
+            'name': '轮播课程',
+            'icon': 'fas fa-ad',
+            'url': 'goods/banner/'
+        }]
+    }, {
+        'app': 'management',
+        'name': '课程代表老师管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '课程代表申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/marketerapplication/'
+        }, {
+            'name': '申请成为老师',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/teacherapplication/'
+        }, {
+            'name': '课程教师佣金',
+            'icon': 'icon far fa-file',
+            'url': 'trade/teachermanagement/'
+        }, {
+            'name': '课程代表关系',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingrelationship/'
+        }, {
+            'name': '课程代表佣金配置',
+            'icon': 'far fa-file',
+            'url': 'marketing/marketerconfigs/'
+        }]
+    }, {
+        'app': 'financial_management',
+        'name': '财务管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '取现申请',
+            'icon': 'far fa-file',
+            'url': 'user_operation/usercashwithdrawal/'
+        }, ]
+    }, {
+        'app': 'users',
+        'name': '用户管理',
+        'icon': 'fas fa-user-shield',
+        'models': [{
+            'name': '用户',
+            'icon': 'fa fa-user',
+            'url': 'users/userprofile/'
+        }, {
+            'name': '组',
+            'icon': 'fas fa-users-cog',
+            'url': 'auth/group/'
+        }, {
+            'name': '短信验证码',
+            'icon': 'icon far fa-comment-dots',
+            'url': 'users/verifycode/'
+        }]
+    }, ]
+}
+
+SIMPLEUI_MARKETING_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['课程推广管理', '课程代表老师管理'],
+    'menus': [{
+        'app': 'marketing',
+        'name': '课程推广管理',
+        'icon': 'icon far fa-file',
+        'models': [{
+            'name': '代表推广码',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingcode/'
+        }, ]
+    }, {
+        'app': 'management',
+        'name': '课程代表老师管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '课程代表申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/marketerapplication/'
+        }, {
+            'name': '课程代表关系',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingrelationship/'
+        }]
+    }]
+}
+
+SIMPLEUI_MARKETING_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['课程推广管理', '课程代表老师管理'],
+    'menus': [{
+        'app': 'marketing',
+        'name': '课程推广管理',
+        'icon': 'icon far fa-file',
+        'models': [{
+            'name': '代表推广码',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingcode/'
+        }, ]
+    }, {
+        'app': 'management',
+        'name': '课程代表老师管理',
+        'icon': 'fas fa-user',
+        'models': [{
+            'name': '课程代表申请',
+            'icon': 'icon far fa-file',
+            'url': 'marketing/marketerapplication/'
+        }, {
+            'name': '课程代表关系',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingrelationship/'
+        }]
+    }]
+}
+
+SIMPLEUI_COURSE_MANAGER = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['课程管理'],
+    'menus': [{
+        'app': 'goods',
+        'name': '课程管理',
+        'icon': 'fas fa-shopping-cart',
+        'models': [{
+            'name': '课程类别',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/coursecategory/'
+        }, {
+            'name': '课程信息',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/course/'
+        }, {
+            'name': '课程章节',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/lesson/'
+        }, {
+            'name': '课程视频',
+            'icon': 'icon fas fa-film',
+            'url': 'goods/video/'
+        }, {
+            'name': '课程资源',
+            'icon': 'icon fas fa-book',
+            'url': 'goods/courseresource/'
+        }, {
+            'name': '轮播课程',
+            'icon': 'fas fa-ad',
+            'url': 'goods/banner/'
+        }]
+    }]
+}
+
+SIMPLEUI_MARKET_MANAGE_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['推广管理', '会员信息'],
+    'menus': [{
+        'app': 'marketing',
+        'name': '推广管理',
+        'icon': 'icon far fa-file',
+        'models': [{
+            'name': '推广海报',
+            'icon': 'fa fa-user',
+            'url': 'marketing/poster/'
+        }, {
+            'name': '课程推广码',
+            'icon': 'fa fa-user',
+            'url': 'marketing/marketingcode/'
+        }, ]
+    }, {
+        'app': 'users',
+        'name': '会员信息',
+        'icon': 'fas fa-user-shield',
+        'models': [{
+            'name': '会员信息',
+            'icon': 'fa fa-user',
+            'url': 'users/userprofile/'
+        }, {
+            'name': '订单信息',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/orderinfo/'
+        }, {
+            'name': '订单商品',
+            'icon': 'icon fas fa-shopping-bag',
+            'url': 'trade/ordergoods/'
+        }]
+    }, ]
+}
+SIMPLEUI_FINANCIAL_MANAGER_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menu_display': ['财务管理', '会员信息'],
+    'menus': [{
+        'app': 'marketing',
+        'name': '财务管理',
+        'icon': 'icon far fa-file',
+        'models': [
+            {
+                'name': '订单信息',
+                'icon': 'icon fas fa-shopping-bag',
+                'url': 'trade/orderinfo/'
+            },{
+                'name': '订单商品',
+                'icon': 'icon fas fa-shopping-bag',
+                'url': 'trade/ordergoods/'
+            }, {
+                'name': '课程代表佣金',
+                'icon': 'fa fa-user',
+                'url': 'marketing/marketingrelationship/'
+            }, {
+                'name': '课程教师佣金',
+                'icon': 'icon far fa-file',
+                'url': 'trade/teachermanagement/'
+            }, {
+                'name': '取现申请',
+                'icon': 'far fa-file',
+                'url': 'user_operation/usercashwithdrawal/'
+            }]
+    }, {
+        'app': 'users',
+        'name': '会员信息',
+        'icon': 'fas fa-user-shield',
+        'models': [{
+            'name': '会员信息',
+            'icon': 'fa fa-user',
+            'url': 'users/userprofile/'
+        }]
+    }, ]
 }

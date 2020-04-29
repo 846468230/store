@@ -18,8 +18,8 @@ class CourseCategory(models.Model):
     name = models.CharField(default="", max_length=30, verbose_name="类别名", help_text="类别名")
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="类别code")
     desc = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
-    image = models.ImageField(upload_to='category/images/', verbose_name='分类封面图', max_length=100, help_text="分类封面图")
-    icon = models.ImageField(upload_to='category/icons/', verbose_name='分类图标', max_length=100, help_text="分类图标")
+    image = models.ImageField(upload_to='category/images/', verbose_name='分类封面图', max_length=100, help_text="分类封面图",null=True)
+    icon = models.ImageField(upload_to='category/icons/', verbose_name='分类图标', max_length=100, help_text="分类图标",null=True)
     category_type = models.IntegerField(choices=CATEGORY_TYPE, verbose_name="类目级别", help_text="类目级别")
     parent_category = models.ForeignKey("self", null=True, blank=True, verbose_name="父类目级别", help_text="父目录",
                                         related_name="sub_cat", on_delete=models.CASCADE)
@@ -94,7 +94,9 @@ class Lesson(models.Model):
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson, verbose_name='章节', on_delete=models.CASCADE,help_text="章节id",related_name="video")
     name = models.CharField(max_length=100, verbose_name='视频名',help_text="视频名称")
-    url = models.URLField(max_length=200, verbose_name='访问地址', default='www.baidu.com',help_text="视频地址")
+    video_file = models.FileField(upload_to='goods/videos/%Y/%m/%d/', null=True, verbose_name="视频文件")
+    vod_id = models.CharField(max_length=100,verbose_name='vod_id',null=True)
+    url = models.URLField(max_length=200, verbose_name='访问地址', null=True,help_text="视频地址")
     learn_times = models.IntegerField(default=0, verbose_name='视频时长(分钟数)',help_text="视频时长")
     added_datetime = models.DateTimeField(auto_now_add=True, verbose_name='增加时间',help_text="创建时间")
     updated_datetime = models.DateTimeField(auto_now=True, verbose_name='更新时间',help_text="更新时间")

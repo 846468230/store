@@ -23,6 +23,12 @@ class UserProfile(AbstractUser):
     id_card_number = models.CharField(null=True, blank=True, max_length=20, verbose_name="身份证号码", help_text="身份证号码")
     id_card_front = models.ImageField(null=True, blank=True,upload_to='users/idcardsfront/', verbose_name='身份证正面', max_length=100, help_text="身份证正面")
     id_card_back = models.ImageField(null=True, blank=True,upload_to='users/idcardsback/', verbose_name='身份证背面', max_length=100, help_text="身份证背面")
+    @property
+    def marketer(self):
+        if self.user_marketer:
+            return self.user_marketer.parent_marketer
+        return None
+    marketer.fget.short_description = "课程代表"
     class Meta:
         verbose_name = "用户"
         verbose_name_plural = "用户"
